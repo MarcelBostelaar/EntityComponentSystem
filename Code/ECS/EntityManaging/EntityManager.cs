@@ -106,11 +106,10 @@ namespace ECS.EntityManaging
         /// <returns>A boolean indicating if it is owned/contained by this manager.</returns>
         private bool Contains(AbstractComponentList list)
         {
-            if (components.ContainsKey(list.ID))
-            {
-                return (ReferenceEquals(components[list.ID], list));
-            }
-            return false;
+            AbstractComponentList listindict;
+            components.TryGetValue(list.ID, out listindict);
+
+            return (ReferenceEquals(listindict, list));
         }
 
         /// <summary>

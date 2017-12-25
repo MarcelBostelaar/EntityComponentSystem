@@ -7,4 +7,6 @@ Components are stored in a component list by an ID. A component list is owned an
 
 Component lists should be kept as a reference by the user outside of the manager, so type information is not lost. Systems should be created to do operations of components. Use the static intersect function of the entity manager class to find all the entity ids that have components in a given set of component lists.
 
+A component list is requested with tags in the form of strings. Upon addition of a component to a list, all components with the same ID and one or more shared tag are removed. This allows for exclusive component groups, such as only allowing one AI per entity.
+
 System calling order, component mutation and component list mutation are **not** threadsafe. It is the responsibility of the user to handle concurrency in a correct manner.
