@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using ECS.IDs;
 using ECS.Exceptions;
 using ECS.Components;
 
 namespace ECS.EntityManaging
 {
-    public class ComponentList<T> : AbstractComponentList where T: class, IComponent
+    public class ComponentList<ComponentType, EntityID> : AbstractComponentList<EntityID> where ComponentType: class, IComponent
     {
-        Dictionary<EntityID, T> components = new Dictionary<EntityID, T>();
+        Dictionary<EntityID, ComponentType> components = new Dictionary<EntityID, ComponentType>();
         IReadOnlyCollection<string> Tags;
         ulong _id;
         
@@ -29,30 +28,30 @@ namespace ECS.EntityManaging
         /// <summary>
         /// Gets the component of a given ID
         /// </summary>
-        /// <param name="ID">The entity ID</param>
+        /// <param name="EntityID">The entity ID</param>
         /// <returns>The component</returns>
         /// <exception cref="ItemDoesntExistException">Thrown when the list does not contain a component of the given ID.</exception>
-        public T GetComponent(EntityID ID)
+        public ComponentType GetComponent(EntityID EntityID)
         {
-            if (components.ContainsKey(ID))
+            if (components.ContainsKey(EntityID))
             {
-                return components[ID];
+                return components[EntityID];
             }
-            throw new ItemDoesntExistException(string.Format("Entity '{0}' does not contain a component of type '{1}'", ID.ToString(), typeof(T).FullName));
+            throw new ItemDoesntExistException(string.Format("Entity '{0}' does not contain a component of type '{1}'", EntityID.ToString(), typeof(ComponentType).FullName));
         }
         
         /// <summary>
         /// Gets all the components of the ids.
         /// </summary>
-        /// <param name="IDs">An enumerable of entity IDs</param>
+        /// <param name="EntityIDs">An enumerable of entity IDs</param>
         /// <returns>A list of tuples with the id and the component.</returns>
         /// <exception cref="ItemDoesntExistException">Thrown when the list does not contain a component of a given ID.</exception>
-        public List<Tuple<EntityID, T>> GetComponents(IEnumerable<EntityID> IDs)
+        public List<Tuple<EntityID, ComponentType>> GetComponents(IEnumerable<EntityID> EntityIDs)
         {
-            var newlist = new List<Tuple<EntityID, T>>();
-            foreach (var id in IDs)
+            var newlist = new List<Tuple<EntityID, ComponentType>>();
+            foreach (var id in EntityIDs)
             {
-                newlist.Add(new Tuple<EntityID, T>(id, GetComponent(id)));
+                newlist.Add(new Tuple<EntityID, ComponentType>(id, GetComponent(id)));
             }
             return newlist;
         }
@@ -60,21 +59,21 @@ namespace ECS.EntityManaging
         /// <summary>
         /// Attaches a component to the list. Replaces the component of the ID if it already was in place.
         /// </summary>
-        /// <param name="ID">The ID to attach the component to.</param>
+        /// <param name="EntityID">The ID to attach the component to.</param>
         /// <param name="component">The component to attach.</param>
-        internal void AttachComponent(EntityID ID, T component)
+        internal void AttachComponent(EntityID EntityID, ComponentType component)
         {
-            components[ID] = component;
+            components[EntityID] = component;
         }
 
         /// <summary>
         /// Removes the component of a specified ID. Explicitly implemented so that it is internal.
         /// </summary>
-        /// <param name="ID">The entity ID of the component to remove</param>
+        /// <param name="EntityID">The entity ID of the component to remove</param>
         /// <returns>True if the component existed, false if the id did not have a component in this list.</returns>
-        internal override bool RemoveComponent(EntityID ID)
+        internal override bool RemoveComponent(EntityID EntityID)
         {
-            return components.Remove(ID);
+            return components.Remove(EntityID);
         }
 
         /// <summary>
@@ -89,11 +88,11 @@ namespace ECS.EntityManaging
         /// <summary>
         /// Returns a boolean indication whether or not the list contains a component of a specific ID.
         /// </summary>
-        /// <param name="id">The ID to check for.</param>
+        /// <param name="EntityID">The ID to check for.</param>
         /// <returns>Bolean indicating if it contains or does not contain a component for that id.</returns>
-        public override bool ContainsID(EntityID id)
+        public override bool ContainsID(EntityID EntityID)
         {
-            return components.ContainsKey(id);
+            return components.ContainsKey(EntityID);
         }
 
         /// <summary>

@@ -4,4 +4,10 @@
     <TargetFramework>netstandard1.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="IDs\**" />
+    <EmbeddedResource Remove="IDs\**" />
+    <None Remove="IDs\**" />
+  </ItemGroup>
+
 </Project>
