@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 using ECS.Exceptions;
-using ECS.Components;
+using ECS.Interfaces;
 
 namespace ECS.EntityManaging
 {
-    public class ComponentList<ComponentType, EntityID> : AbstractComponentList<EntityID> where ComponentType: class, IComponent
+    public class ComponentList<ComponentType, EntityID, CacheID> : AbstractComponentList<EntityID, CacheID> where ComponentType: class, IComponent
     {
         Dictionary<EntityID, ComponentType> components = new Dictionary<EntityID, ComponentType>();
         IReadOnlyCollection<string> Tags;
@@ -39,7 +39,7 @@ namespace ECS.EntityManaging
             }
             throw new ItemDoesntExistException(string.Format("Entity '{0}' does not contain a component of type '{1}'", EntityID.ToString(), typeof(ComponentType).FullName));
         }
-        
+
         /// <summary>
         /// Gets all the components of the ids.
         /// </summary>
@@ -102,6 +102,29 @@ namespace ECS.EntityManaging
         internal override IReadOnlyCollection<string> GetTags()
         {
             return Tags;
+        }
+
+
+        Dictionary<CacheID, Func<ComponentType>> _cache = new Dictionary<CacheID, Func<ComponentType>>();
+        internal void AttachCache(Func<ComponentType> componentCreationFunction, CacheID cacheID)
+        {
+            _cache[cacheID] = componentCreationFunction;
+        }
+
+        internal override bool RemoveCache(CacheID cacheID)
+        {
+            return _cache.Remove(cacheID);
+        }
+
+        internal override void CreateFromCache(CacheID cacheID, EntityID toEntityID)
+        {
+            Func<ComponentType> cached;
+            _cache.TryGetValue(cacheID, out cached);
+            if(cached == null)
+            {
+                throw new ItemDoesntExistException(string.Format("Component of type {0} was not cached with id {1}", typeof(ComponentType).FullName, cacheID.ToString()));
+            }
+            components[toEntityID] = cached();
         }
     }
 }
