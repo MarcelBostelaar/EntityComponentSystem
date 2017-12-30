@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using ECS.Exceptions;
 using ECS.Interfaces;
+using ECS.Utilities;
 
 namespace ECS.EntityManaging
 {
@@ -105,8 +106,8 @@ namespace ECS.EntityManaging
         }
 
 
-        Dictionary<CacheID, Func<ComponentType>> _cache = new Dictionary<CacheID, Func<ComponentType>>();
-        internal void AttachCache(Func<ComponentType> componentCreationFunction, CacheID cacheID)
+        Dictionary<CacheID, Func<Union<ComponentType, None>>> _cache = new Dictionary<CacheID, Func<Union<ComponentType, None>>>();
+        internal void AttachCache(Func<Union<ComponentType, None>> componentCreationFunction, CacheID cacheID)
         {
             _cache[cacheID] = componentCreationFunction;
         }
@@ -118,13 +119,20 @@ namespace ECS.EntityManaging
 
         internal override void CreateFromCache(CacheID cacheID, EntityID toEntityID)
         {
-            Func<ComponentType> cached;
+            Func<Union<ComponentType, None>> cached;
             _cache.TryGetValue(cacheID, out cached);
             if(cached == null)
             {
                 throw new ItemDoesntExistException(string.Format("Component of type {0} was not cached with id {1}", typeof(ComponentType).FullName, cacheID.ToString()));
             }
-            components[toEntityID] = cached();
+            cached().Match<int>(
+                createdComponent =>
+                {
+                    components[toEntityID] = createdComponent;
+                    return 0;
+                },
+                createdNone => 0
+                );
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using ECS.Exceptions;
+using ECS.Utilities;
 
 namespace ECS.EntityManaging
 {
@@ -133,7 +134,7 @@ namespace ECS.EntityManaging
         }
 
 
-        public void CacheComponentCreation<T>(CacheID idToCacheTo, Func<T> componentCreationFunction, ComponentList<T, EntityID, CacheID> componentList) where T : class, IComponent
+        public void CacheComponentCreation<T>(CacheID idToCacheTo, Func<Union<T, None>> componentCreationFunction, ComponentList<T, EntityID, CacheID> componentList) where T : class, IComponent
         {
             if (!Contains(componentList))
             {

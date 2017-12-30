@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using ECS.Exceptions;
+using ECS.Utilities;
 
 namespace ECS.Deserializer
 {
@@ -28,16 +29,34 @@ namespace ECS.Deserializer
         /// <typeparam name="ComponentType">The component type to register.</typeparam>
         /// <param name="componentList">The component list to register this function to.</param>
         /// <param name="ComponentCreationFunction">A function that takes an input of type ComponentType and returns a function that creates a completely new component upon being called.</param>
-        public void RegisterComponentDeserializer<ComponentType>(ComponentList<ComponentType, EntityID, CacheID> componentList, Func<InputType, Func<ComponentType>> ComponentCreationFunction) where ComponentType : class, IComponent
+        public void RegisterComponentDeserializer<ComponentType>(ComponentList<ComponentType, EntityID, CacheID> componentList, Func<InputType, Func<Union<ComponentType, None>>> ComponentCreationFunction) where ComponentType : class, IComponent
         {
             if (_manager.Contains(componentList))
             {
                 _deserializeActions.Add( 
-                    (inputValue, EntityID) => _manager.AttachComponent(componentList, ComponentCreationFunction(inputValue)(), EntityID) //Takes an inputValue and an entity ID and creates a new entity with the deserialized values on that ID
+                    (inputValue, EntityID) =>
+                    {
+                        var component = ComponentCreationFunction(inputValue)();
+                        component.Match<bool>(
+                            returnedComponent => { _manager.AttachComponent(componentList, returnedComponent, EntityID); return true; }, //Takes an inputValue and an entity ID and creates a new entity with the deserialized values on that ID
+                            x => { return false; } //None value
+                            );
+                    } 
                     );
 
-                _cacheCreationFunction.Add( 
-                    (inputValue, cacheID) => _manager.CacheComponentCreation(cacheID, ComponentCreationFunction(inputValue), componentList)); //Takes an inputValue and a cacheID and creates a new cached item on that ID
+                _cacheCreationFunction.Add( //Adds a lambda that creates a cached function
+                    (inputValue, cacheID) =>
+                    {
+                        var component = ComponentCreationFunction(inputValue); //Create component
+                        component().Match<bool>( //Check if input value produced component or None
+                            returnsComponent => //produced component
+                            {
+                                _manager.CacheComponentCreation(cacheID, component, componentList); //Save the new component constructor to the list
+                                return true;
+                            },
+                            returnsNone => false //None produced, take no action
+                            );
+                    });
             }
             else
             {
