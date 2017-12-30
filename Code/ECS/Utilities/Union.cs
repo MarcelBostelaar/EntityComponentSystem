@@ -8,11 +8,11 @@ namespace ECS.Utilities
     {
         private Union() { }
         public abstract T Match<T>(Func<A, T> f, Func<B, T> g);
-        public Union<A, B> Create(A from)
+        public static Union<A, B> Create(A from)
         {
             return new CaseA(from);
         }
-        public Union<A, B> Create(B from)
+        public static Union<A, B> Create(B from)
         {
             return new CaseB(from);
         }
@@ -20,7 +20,7 @@ namespace ECS.Utilities
         public sealed class CaseA : Union<A,B>
         {
             public readonly A item;
-            public CaseA(A value)
+            internal CaseA(A value)
             {
                 item = value;
             }
@@ -33,7 +33,7 @@ namespace ECS.Utilities
         public sealed class CaseB : Union<A, B>
         {
             public readonly B item;
-            public CaseB(B value)
+            internal CaseB(B value)
             {
                 item = value;
             }
