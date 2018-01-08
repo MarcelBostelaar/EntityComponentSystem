@@ -117,7 +117,7 @@ namespace ECS.EntityManaging
             return _cache.Remove(cacheID);
         }
 
-        internal override void CreateFromCache(CacheID cacheID, EntityID toEntityID)
+        internal override void CreateFromCache(CacheID cacheID, EntityID toEntityID, EntityManager<EntityID, CacheID> manager)
         {
             Func<Union<ComponentType, None>> cached;
             _cache.TryGetValue(cacheID, out cached);
@@ -128,7 +128,7 @@ namespace ECS.EntityManaging
             cached().Match<int>(
                 createdComponent =>
                 {
-                    components[toEntityID] = createdComponent;
+                    manager.AttachComponent(this, createdComponent, toEntityID);
                     return 0;
                 },
                 createdNone => 0

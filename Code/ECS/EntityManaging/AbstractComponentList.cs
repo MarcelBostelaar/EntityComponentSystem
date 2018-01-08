@@ -23,6 +23,6 @@ namespace ECS.EntityManaging
 
         abstract internal bool RemoveCache(CacheID cacheID);
 
-        abstract internal void CreateFromCache(CacheID cacheID, EntityID toEntityID);
+        abstract internal void CreateFromCache(CacheID cacheID, EntityID toEntityID, EntityManager<EntityID, CacheID> manager);
     }
 }

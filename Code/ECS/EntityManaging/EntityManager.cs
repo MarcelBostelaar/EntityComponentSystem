@@ -58,7 +58,7 @@ namespace ECS.EntityManaging
         /// <param name="componentList">The component list to remove the component from</param>
         /// <param name="id">The id of the entity for which to remove the component</param>
         /// <returns>True if the component existed, false if there was no component to begin with.</returns>
-        public bool RemoveComponent<T>(ComponentList<T, EntityID, CacheID> componentList, EntityID id) where T : class, IComponent
+        public bool RemoveComponent(AbstractComponentList<EntityID, CacheID> componentList, EntityID id)
         {
             if (Contains(componentList))
             {
@@ -155,7 +155,7 @@ namespace ECS.EntityManaging
         {
             foreach (var item in components.Values)
             {
-                item.CreateFromCache(id, toEntityID);
+                item.CreateFromCache(id, toEntityID, this);
             }
         }
     }
