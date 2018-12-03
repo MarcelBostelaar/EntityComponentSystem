@@ -15,6 +15,15 @@ let apply error x f =
         | Error j -> (error , j) |> ParentError |> Error
         | Ok j -> i j |> Ok
 
+let applynoerror x f =
+    match f with
+    | Error i -> i
+    | Ok i ->
+        match x with
+        | Error j -> j
+        | Ok j -> i j |> Ok
+    
+
 let Map1 f error a =
     Ok f |> apply error a
     

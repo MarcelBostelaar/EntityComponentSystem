@@ -38,14 +38,12 @@ let main argv =
 
     let BuildPoint2 x y = {x=x ; y=y}
     
-    let matchx = MatchRecordEntry "x" MatchInt
-    let matchy = MatchRecordEntry "y" MatchInt
+    let matchx = MatchRecordEntry "x" MatchInt |> MatchEntryInRecord
+    let matchy = MatchRecordEntry "y" MatchInt |> MatchEntryInRecord
 
 
-    let matchpoint2 values =
-        let x = MatchAny matchx values
-        let y = MatchAny matchy values
-        Map2 BuildPoint2 "In BuildPoint2" x y
+    let matchpoint2 values=
+        matchx values |> TupleSecondApplyBound matchy
 
 
     //let MatchPoint2 (values : (string * JsonValue) list ) = 

@@ -5,8 +5,6 @@ open ParserErrors
 open ResultHelperFunctions
 open System
 
-type RecordMatcher<'a> = string * JsonValue -> Result<'a, ErrorTrace>
-
 let MatchString jsonvalue =
     match jsonvalue with 
     | JsonValue.String x -> Ok x
@@ -88,7 +86,7 @@ let MatchAny (matcher : 'a -> Result<'b, ErrorTrace>) (values : 'a list) =
 //        ProcessResults resultsreversed results
 //    | _ -> CreateRootErrorMessage TypeNames.Record jsonvalue
 
-let MatchEntryInRecord (matcher : RecordMatcher<'a>) (entries : (string * JsonValue) list) =
+let MatchEntryInRecord (matcher : string * JsonValue -> Result<'a, ErrorTrace>) (entries : (string * JsonValue) list) =
     let resultsandvalue = (fun x -> matcher x, x) |> List.map <| entries
     let resultsonly list = List.map fst list
     if resultsonly resultsandvalue |> IsSingleOk
@@ -105,8 +103,20 @@ let MatchRecord jsonvalue =
     | JsonValue.Record x -> Array.toList x |> Ok
     | _ -> CreateRootErrorMessage TypeNames.Record jsonvalue
 
-let ResultFst value = Result.map fst value
-let ResultSnd value = Result.map snd value
+let private flipTuple sometuple =
+    (fst sometuple, snd sometuple |> fst), snd sometuple |> snd
+
+let TupleSecondApply (f: 'a list -> ('b*('a list))) tuple =
+    let first = fst tuple
+    let second = snd tuple
+    let result = f second
+    (first, fst result), snd result
+
+let TupleSecondApplyBound (f: Result<'input,'error> -> Result<'output1 * 'output2,'error>) (tuple : Result<'x*'input, 'error>) =
+    let first = Result.map fst tuple
+    let result = f <| Result.map snd tuple
+    //tuple map result
+    (first, fst result), snd result
 
 let MatchStringBound = Bind MatchString "In MatchString"
 let MatchBoolBound = Bind MatchBool "In MatchBool"
