@@ -17,7 +17,10 @@ Chaining a building function:
 ApplyChainStart [Result<'n -> ... -> b->'a-'>'builditem, 'errortrace>] [tuple result of chaining, see above] |> ApplyChain (n times) ... |> ApplyChainFinish
 Builder function accesses elements in the reverse order that the match chain made them
  *)
+ 
+type Matcher<'a> = string*JsonValue -> Result<'a,ErrorTrace>
 
+let private chainify matcher = MatchEntryInRecord matcher |> Result.bind |> TupleSecondApplyBound
 
 let EntryChainStarter a = (fun x -> (), x) |> Result.map <| a
 let EntryChainer name matcher error =  MatchRecordEntry name matcher |> MatchEntryInRecord |> Bind <| error |> TupleSecondApplyBound
@@ -40,3 +43,100 @@ let ApplyChainStart f=
     MakeTuple2Result f
 let private _applychainfinish (value: 'a*unit) = fst value
 let ApplyChainFinish x = Result.map _applychainfinish x
+
+let MatchBuild1 func a json=
+    let nested_tuples = MatchRecord json |> EntryChainStarter |> chainify a |> EntryChainFinisher
+    ApplyChainStart (Ok func) nested_tuples |> ApplyChain |> ApplyChainFinish
+
+let MatchBuild2 func a b json=
+    let nested_tuples = MatchRecord json |> EntryChainStarter |> chainify a |> chainify b |> EntryChainFinisher
+    ApplyChainStart (Ok func) nested_tuples |> ApplyChain |> ApplyChain |> ApplyChainFinish
+
+let MatchBuild3 func a b c json=
+    let nested_tuples = MatchRecord json |> EntryChainStarter |> chainify a |> chainify b |> chainify c |> EntryChainFinisher
+    ApplyChainStart (Ok func) nested_tuples |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChainFinish
+
+let MatchBuild4 func a b c d json=
+    let nested_tuples = MatchRecord json |> EntryChainStarter |> chainify a |> chainify b |> chainify c |> chainify d |> EntryChainFinisher
+    ApplyChainStart (Ok func) nested_tuples |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChainFinish
+
+let MatchBuild5 func a b c d e json=
+    let nested_tuples = MatchRecord json |> EntryChainStarter |> chainify a |> chainify b |> chainify c |> chainify d |> chainify e |> EntryChainFinisher
+    ApplyChainStart (Ok func) nested_tuples |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChainFinish
+
+let MatchBuild6 func a b c d e f json=
+    let nested_tuples = MatchRecord json |> EntryChainStarter |> chainify a |> chainify b |> chainify c |> chainify d |> chainify e |> chainify f |> EntryChainFinisher
+    ApplyChainStart (Ok func) nested_tuples |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChainFinish
+
+let MatchBuild7 func a b c d e f g json=
+    let nested_tuples = MatchRecord json |> EntryChainStarter |> chainify a |> chainify b |> chainify c |> chainify d |> chainify e |> chainify f |> chainify g |> EntryChainFinisher
+    ApplyChainStart (Ok func) nested_tuples |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChainFinish
+
+let MatchBuild8 func a b c d e f g h json=
+    let nested_tuples = MatchRecord json |> EntryChainStarter |> chainify a |> chainify b |> chainify c |> chainify d |> chainify e |> chainify f |> chainify g |> chainify h |> EntryChainFinisher
+    ApplyChainStart (Ok func) nested_tuples |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChainFinish
+
+let MatchBuild9 func a b c d e f g h i json=
+    let nested_tuples = MatchRecord json |> EntryChainStarter |> chainify a |> chainify b |> chainify c |> chainify d |> chainify e |> chainify f |> chainify g |> chainify h |> chainify i |> EntryChainFinisher
+    ApplyChainStart (Ok func) nested_tuples |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChainFinish
+
+let MatchBuild10 func a b c d e f g h i j json=
+    let nested_tuples = MatchRecord json |> EntryChainStarter |> chainify a |> chainify b |> chainify c |> chainify d |> chainify e |> chainify f |> chainify g |> chainify h |> chainify i |> chainify j |> EntryChainFinisher
+    ApplyChainStart (Ok func) nested_tuples |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChainFinish
+
+let MatchBuild11 func a b c d e f g h i j k json=
+    let nested_tuples = MatchRecord json |> EntryChainStarter |> chainify a |> chainify b |> chainify c |> chainify d |> chainify e |> chainify f |> chainify g |> chainify h |> chainify i |> chainify j |> chainify k |> EntryChainFinisher
+    ApplyChainStart (Ok func) nested_tuples |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChainFinish
+
+let MatchBuild12 func a b c d e f g h i j k l json=
+    let nested_tuples = MatchRecord json |> EntryChainStarter |> chainify a |> chainify b |> chainify c |> chainify d |> chainify e |> chainify f |> chainify g |> chainify h |> chainify i |> chainify j |> chainify k |> chainify l |> EntryChainFinisher
+    ApplyChainStart (Ok func) nested_tuples |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChainFinish
+
+let MatchBuild13 func a b c d e f g h i j k l m json=
+    let nested_tuples = MatchRecord json |> EntryChainStarter |> chainify a |> chainify b |> chainify c |> chainify d |> chainify e |> chainify f |> chainify g |> chainify h |> chainify i |> chainify j |> chainify k |> chainify l |> chainify m |> EntryChainFinisher
+    ApplyChainStart (Ok func) nested_tuples |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChainFinish
+
+let MatchBuild14 func a b c d e f g h i j k l m n json=
+    let nested_tuples = MatchRecord json |> EntryChainStarter |> chainify a |> chainify b |> chainify c |> chainify d |> chainify e |> chainify f |> chainify g |> chainify h |> chainify i |> chainify j |> chainify k |> chainify l |> chainify m |> chainify n |> EntryChainFinisher
+    ApplyChainStart (Ok func) nested_tuples |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChainFinish
+
+let MatchBuild15 func a b c d e f g h i j k l m n o json=
+    let nested_tuples = MatchRecord json |> EntryChainStarter |> chainify a |> chainify b |> chainify c |> chainify d |> chainify e |> chainify f |> chainify g |> chainify h |> chainify i |> chainify j |> chainify k |> chainify l |> chainify m |> chainify n |> chainify o |> EntryChainFinisher
+    ApplyChainStart (Ok func) nested_tuples |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChainFinish
+
+let MatchBuild16 func a b c d e f g h i j k l m n o p json=
+    let nested_tuples = MatchRecord json |> EntryChainStarter |> chainify a |> chainify b |> chainify c |> chainify d |> chainify e |> chainify f |> chainify g |> chainify h |> chainify i |> chainify j |> chainify k |> chainify l |> chainify m |> chainify n |> chainify o |> chainify p |> EntryChainFinisher
+    ApplyChainStart (Ok func) nested_tuples |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChainFinish
+
+let MatchBuild17 func a b c d e f g h i j k l m n o p q json=
+    let nested_tuples = MatchRecord json |> EntryChainStarter |> chainify a |> chainify b |> chainify c |> chainify d |> chainify e |> chainify f |> chainify g |> chainify h |> chainify i |> chainify j |> chainify k |> chainify l |> chainify m |> chainify n |> chainify o |> chainify p |> chainify q |> EntryChainFinisher
+    ApplyChainStart (Ok func) nested_tuples |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChainFinish
+
+let MatchBuild18 func a b c d e f g h i j k l m n o p q r json=
+    let nested_tuples = MatchRecord json |> EntryChainStarter |> chainify a |> chainify b |> chainify c |> chainify d |> chainify e |> chainify f |> chainify g |> chainify h |> chainify i |> chainify j |> chainify k |> chainify l |> chainify m |> chainify n |> chainify o |> chainify p |> chainify q |> chainify r |> EntryChainFinisher
+    ApplyChainStart (Ok func) nested_tuples |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChainFinish
+
+let MatchBuild19 func a b c d e f g h i j k l m n o p q r s json=
+    let nested_tuples = MatchRecord json |> EntryChainStarter |> chainify a |> chainify b |> chainify c |> chainify d |> chainify e |> chainify f |> chainify g |> chainify h |> chainify i |> chainify j |> chainify k |> chainify l |> chainify m |> chainify n |> chainify o |> chainify p |> chainify q |> chainify r |> chainify s |> EntryChainFinisher
+    ApplyChainStart (Ok func) nested_tuples |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChainFinish
+
+let MatchBuild20 func a b c d e f g h i j k l m n o p q r s t json=
+    let nested_tuples = MatchRecord json |> EntryChainStarter |> chainify a |> chainify b |> chainify c |> chainify d |> chainify e |> chainify f |> chainify g |> chainify h |> chainify i |> chainify j |> chainify k |> chainify l |> chainify m |> chainify n |> chainify o |> chainify p |> chainify q |> chainify r |> chainify s |> chainify t |> EntryChainFinisher
+    ApplyChainStart (Ok func) nested_tuples |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChainFinish
+
+//Python generation code
+//------------------------------------------------------------------------
+//offset = 97
+//def create(lenght):
+//    letters = " ".join([chr(x+offset) for x in range(lenght)])
+//    chainify = " ".join(["chainify {} |>".format(chr(x+offset)) for x in range(lenght)])
+//    applychain = " ".join(["ApplyChain |>" for x in range(lenght)])
+//    return """let MatchBuild{} func {} json=
+//    let nested_tuples = MatchRecord json |> EntryChainStarter |> {} EntryChainFinisher
+//    ApplyChainStart (Ok func) nested_tuples |> {} ApplyChainFinish""".format(lenght, letters, chainify, applychain)
+
+//file = open("text.fs","w")
+//for i in range(1, 21):
+//    file.write(create(i))
+//    file.write("\n\n")
+//-----------------------------------------------------------------------
