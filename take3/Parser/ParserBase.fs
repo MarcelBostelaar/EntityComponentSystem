@@ -103,8 +103,9 @@ let MatchRecord jsonvalue =
     | JsonValue.Record x -> Array.toList x |> Ok
     | _ -> CreateRootErrorMessage TypeNames.Record jsonvalue
 
-let private flipTuple sometuple =
-    (fst sometuple, snd sometuple |> fst), snd sometuple |> snd
+let maketuple a b = a,b
+
+let MakeTuple2Result a b = Map2 maketuple "Making Tuple" a b
 
 let TupleSecondApply (f: 'a list -> ('b*('a list))) tuple =
     let first = fst tuple
@@ -112,11 +113,14 @@ let TupleSecondApply (f: 'a list -> ('b*('a list))) tuple =
     let result = f second
     (first, fst result), snd result
 
-let TupleSecondApplyBound (f: Result<'input,'error> -> Result<'output1 * 'output2,'error>) (tuple : Result<'x*'input, 'error>) =
+let TupleSecondApplyBound (f: Result<'input,ErrorTrace> -> Result<'output1 * 'output2,ErrorTrace>) (tuple : Result<'x*'input, ErrorTrace>) =
     let first = Result.map fst tuple
     let result = f <| Result.map snd tuple
-    //tuple map result
-    (first, fst result), snd result
+    let output1 = Result.map fst result
+    let output2 = Result.map snd result
+    MakeTuple2Result first <| output1 |> MakeTuple2Result  <| output2
+
+
 
 let MatchStringBound = Bind MatchString "In MatchString"
 let MatchBoolBound = Bind MatchBool "In MatchBool"

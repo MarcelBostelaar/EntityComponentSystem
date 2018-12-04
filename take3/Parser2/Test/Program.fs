@@ -5,6 +5,7 @@ open FSharp.Data
 open ParserBase
 open ParserErrors
 open ResultHelperFunctions
+open RecordChainer
 
 type Point = { x: int; y: int }
 
@@ -36,27 +37,17 @@ let main argv =
 
     let parsed = JsonValue.TryParse exampleJson |> OptionToResult "Could not parse json"    
 
-    let BuildPoint2 x y = {x=x ; y=y}
-    
-    let matchx = MatchRecordEntry "x" MatchInt |> MatchEntryInRecord
-    let matchy = MatchRecordEntry "y" MatchInt |> MatchEntryInRecord
+    let BuildPoint2 y x = {x=x ; y=y}
+        
+    let matchx = EntryChainer "x" MatchInt "In MatchX"
+    let matchy = EntryChainer "y" MatchInt "In MatchY"
 
+    let point2Matching values=
+        values |> EntryChainStarter |> matchx |> matchy |>  EntryChainFinisher
 
-    let matchpoint2 values=
-        matchx values |> TupleSecondApplyBound matchy
+    let point2Building values =
+        ApplyChainStart (Ok BuildPoint2) values |> ApplyChain |> ApplyChain |> ApplyChainFinish
 
-
-    //let MatchPoint2 (values : (string * JsonValue) list ) = 
-    //    if values.Length <> 2 
-    //    then """Expected record of form {"x":int, "y":int} with two elements, got record with different number of elements instead""" |> RootError |> Error 
-    //    else 
-    //        let x = matchArray (fun value -> if fst value <> "x" then RootError "Name should be x" |> Error else MatchInt (snd value)) values
-    //        let y = matchArray (fun value -> if fst value <> "y" then RootError "Name should be y" |> Error else MatchInt (snd value)) values
-    //        Map2 BuildPoint2 "In BuildPoint" x y
-
-    
-
-
-    //let matchExample json = */
+    let MatchPoint2 values = point2Matching values |> point2Building
 
     0 // return an integer exit code

@@ -10,6 +10,7 @@
     <Compile Include="ParserErrors.fs" />
     <Compile Include="ResultHelperFunctions.fs" />
     <Compile Include="ParserBase.fs" />
+    <Compile Include="RecordChainer.fs" />
   </ItemGroup>
 
   <ItemGroup>
