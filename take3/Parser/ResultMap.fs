@@ -126,20 +126,21 @@ let MapError20 func a b c d e f g h i j k l m n o p q r s t =
 //Python generation code
 //------------------------------------------------------------------------
 //offset = 97
-//def create(lenght, funcbasename, applyfunc):
+//def create(lenght, funcbasename, applyfunc, returnfunc):
 //    letters = " ".join([chr(x+offset) for x in range(lenght)])
 //    applies = " ".join(["|> {} {}".format(applyfunc, chr(x+offset)) for x in range(lenght)])
 //    return """let {}{} func {} =
-//    Ok func {}""".format(
+//    {} func {}""".format(
 //        funcbasename,
 //        lenght,
 //        letters,
+//        returnfunc,
 //        applies)
 
 //file = open("GeneratedCode.fs","w")
 //for i in range(1, 21):
-//    file.write(create(i, "Map", "ApplyOk"))
+//    file.write(create(i, "Map", "ApplyOk", "Ok"))
 //    file.write("\n\n")
-//    file.write(create(i, "MapError", "ApplyError"))
+//    file.write(create(i, "MapError", "ApplyError", "Error"))
 //    file.write("\n\n")
 //-----------------------------------------------------------------------
