@@ -41,7 +41,7 @@ let MatchRecordEntry name valuematch recordentry =
     
 let maketuple a b = a,b
 
-let MakeTuple2Result a b = Map2 maketuple a b
+let MakeTuple2Result a b = ResultMap.Map2 maketuple a b
 
 let MatchEntryInRecord matcher (entries : (string* ParsedData) list) =
     let resultsandvalue = (fun x -> matcher x, x) |> List.map <| entries

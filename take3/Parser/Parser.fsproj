@@ -9,6 +9,7 @@
     <Compile Include="TypeNames.fs" />
     <Compile Include="ParserErrors.fs" />
     <Compile Include="ResultHelperFunctions.fs" />
+    <Compile Include="ResultMap.fs" />
     <Compile Include="ParserBase.fs" />
     <Compile Include="RecordChainer.fs" />
   </ItemGroup>

@@ -24,18 +24,7 @@ let main argv =
   }
 }
 """
-
-    let ListOfFuncApply functions value = List.map( fun f -> f value) functions //Applies a value to a list of functions
-    let ListOfFuncListOfValuesApply functions values = List.map <| ListOfFuncApply functions <| values //applies a list of values to a list of functions
-
-    let functions = [(fun x -> x);(fun x -> x);(fun x -> x);(fun x -> x);(fun x -> x);(fun x -> x);(fun x -> x)]
-    let values = [1;2;3]
-
-    let result = ListOfFuncListOfValuesApply functions values
-
-    let showmefuck = result
-
-    let parsed = JsonValue.TryParse exampleJson |> OptionToResult "Could not parse json"    
+    let parsed = JsonValue.TryParse exampleJson |> OptionToResult (ErrorDescription.String "Could not parse json")
 
     let BuildPoint2 x y= {x=x ; y=y}
 
