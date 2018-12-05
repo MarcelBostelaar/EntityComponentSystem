@@ -4,18 +4,13 @@ open ParserErrors
 
 let Bind f error value=
     match value with
-    | Ok x -> f x
-    | Error x -> (error , x) |> ParentError |> Error
-
-let apply error x f = 
-    match f with
-    | Error i -> (error , i) |> ParentError |> Error
-    | Ok i ->
-        match x with
-        | Error j -> (error , j) |> ParentError |> Error
-        | Ok j -> i j |> Ok
-
-let applynoerror x f =
+    | Ok x -> 
+        match f x with
+        | Ok y -> Ok y
+        | Error y -> (error, y) |> ParentError |> Error
+    | Error x -> Error x
+    
+let Apply x f =
     match f with
     | Error i -> i
     | Ok i ->
@@ -75,100 +70,79 @@ let OptionToResult error option=
     | Some x -> Ok x
     | None -> RootError error |> Error
 
-let Map1 func error a =
-    let la x = apply error x
-    Ok func |> la a
+let Map1 func a =
+    Ok func |> Apply a
 
-let Map2 func error a b =
-    let la x = apply error x
-    Ok func |> la a |> la b
+let Map2 func a b =
+    Ok func |> Apply a |> Apply b
 
-let Map3 func error a b c =
-    let la x = apply error x
-    Ok func |> la a |> la b |> la c
+let Map3 func a b c =
+    Ok func |> Apply a |> Apply b |> Apply c
 
-let Map4 func error a b c d =
-    let la x = apply error x
-    Ok func |> la a |> la b |> la c |> la d
+let Map4 func a b c d =
+    Ok func |> Apply a |> Apply b |> Apply c |> Apply d
 
-let Map5 func error a b c d e =
-    let la x = apply error x
-    Ok func |> la a |> la b |> la c |> la d |> la e
+let Map5 func a b c d e =
+    Ok func |> Apply a |> Apply b |> Apply c |> Apply d |> Apply e
 
-let Map6 func error a b c d e f =
-    let la x = apply error x
-    Ok func |> la a |> la b |> la c |> la d |> la e |> la f
+let Map6 func a b c d e f =
+    Ok func |> Apply a |> Apply b |> Apply c |> Apply d |> Apply e |> Apply f
 
-let Map7 func error a b c d e f g =
-    let la x = apply error x
-    Ok func |> la a |> la b |> la c |> la d |> la e |> la f |> la g
+let Map7 func a b c d e f g =
+    Ok func |> Apply a |> Apply b |> Apply c |> Apply d |> Apply e |> Apply f |> Apply g
 
-let Map8 func error a b c d e f g h =
-    let la x = apply error x
-    Ok func |> la a |> la b |> la c |> la d |> la e |> la f |> la g |> la h
+let Map8 func a b c d e f g h =
+    Ok func |> Apply a |> Apply b |> Apply c |> Apply d |> Apply e |> Apply f |> Apply g |> Apply h
 
-let Map9 func error a b c d e f g h i =
-    let la x = apply error x
-    Ok func |> la a |> la b |> la c |> la d |> la e |> la f |> la g |> la h |> la i
+let Map9 func a b c d e f g h i =
+    Ok func |> Apply a |> Apply b |> Apply c |> Apply d |> Apply e |> Apply f |> Apply g |> Apply h |> Apply i
 
-let Map10 func error a b c d e f g h i j =
-    let la x = apply error x
-    Ok func |> la a |> la b |> la c |> la d |> la e |> la f |> la g |> la h |> la i |> la j
+let Map10 func a b c d e f g h i j =
+    Ok func |> Apply a |> Apply b |> Apply c |> Apply d |> Apply e |> Apply f |> Apply g |> Apply h |> Apply i |> Apply j
 
-let Map11 func error a b c d e f g h i j k =
-    let la x = apply error x
-    Ok func |> la a |> la b |> la c |> la d |> la e |> la f |> la g |> la h |> la i |> la j |> la k
+let Map11 func a b c d e f g h i j k =
+    Ok func |> Apply a |> Apply b |> Apply c |> Apply d |> Apply e |> Apply f |> Apply g |> Apply h |> Apply i |> Apply j |> Apply k
 
-let Map12 func error a b c d e f g h i j k l =
-    let la x = apply error x
-    Ok func |> la a |> la b |> la c |> la d |> la e |> la f |> la g |> la h |> la i |> la j |> la k |> la l
+let Map12 func a b c d e f g h i j k l =
+    Ok func |> Apply a |> Apply b |> Apply c |> Apply d |> Apply e |> Apply f |> Apply g |> Apply h |> Apply i |> Apply j |> Apply k |> Apply l
 
-let Map13 func error a b c d e f g h i j k l m =
-    let la x = apply error x
-    Ok func |> la a |> la b |> la c |> la d |> la e |> la f |> la g |> la h |> la i |> la j |> la k |> la l |> la m
+let Map13 func a b c d e f g h i j k l m =
+    Ok func |> Apply a |> Apply b |> Apply c |> Apply d |> Apply e |> Apply f |> Apply g |> Apply h |> Apply i |> Apply j |> Apply k |> Apply l |> Apply m
 
-let Map14 func error a b c d e f g h i j k l m n =
-    let la x = apply error x
-    Ok func |> la a |> la b |> la c |> la d |> la e |> la f |> la g |> la h |> la i |> la j |> la k |> la l |> la m |> la n
+let Map14 func a b c d e f g h i j k l m n =
+    Ok func |> Apply a |> Apply b |> Apply c |> Apply d |> Apply e |> Apply f |> Apply g |> Apply h |> Apply i |> Apply j |> Apply k |> Apply l |> Apply m |> Apply n
 
-let Map15 func error a b c d e f g h i j k l m n o =
-    let la x = apply error x
-    Ok func |> la a |> la b |> la c |> la d |> la e |> la f |> la g |> la h |> la i |> la j |> la k |> la l |> la m |> la n |> la o
+let Map15 func a b c d e f g h i j k l m n o =
+    Ok func |> Apply a |> Apply b |> Apply c |> Apply d |> Apply e |> Apply f |> Apply g |> Apply h |> Apply i |> Apply j |> Apply k |> Apply l |> Apply m |> Apply n |> Apply o
 
-let Map16 func error a b c d e f g h i j k l m n o p =
-    let la x = apply error x
-    Ok func |> la a |> la b |> la c |> la d |> la e |> la f |> la g |> la h |> la i |> la j |> la k |> la l |> la m |> la n |> la o |> la p
+let Map16 func a b c d e f g h i j k l m n o p =
+    Ok func |> Apply a |> Apply b |> Apply c |> Apply d |> Apply e |> Apply f |> Apply g |> Apply h |> Apply i |> Apply j |> Apply k |> Apply l |> Apply m |> Apply n |> Apply o |> Apply p
 
-let Map17 func error a b c d e f g h i j k l m n o p q =
-    let la x = apply error x
-    Ok func |> la a |> la b |> la c |> la d |> la e |> la f |> la g |> la h |> la i |> la j |> la k |> la l |> la m |> la n |> la o |> la p |> la q
+let Map17 func a b c d e f g h i j k l m n o p q =
+    Ok func |> Apply a |> Apply b |> Apply c |> Apply d |> Apply e |> Apply f |> Apply g |> Apply h |> Apply i |> Apply j |> Apply k |> Apply l |> Apply m |> Apply n |> Apply o |> Apply p |> Apply q
 
-let Map18 func error a b c d e f g h i j k l m n o p q r =
-    let la x = apply error x
-    Ok func |> la a |> la b |> la c |> la d |> la e |> la f |> la g |> la h |> la i |> la j |> la k |> la l |> la m |> la n |> la o |> la p |> la q |> la r
+let Map18 func a b c d e f g h i j k l m n o p q r =
+    Ok func |> Apply a |> Apply b |> Apply c |> Apply d |> Apply e |> Apply f |> Apply g |> Apply h |> Apply i |> Apply j |> Apply k |> Apply l |> Apply m |> Apply n |> Apply o |> Apply p |> Apply q |> Apply r
 
-let Map19 func error a b c d e f g h i j k l m n o p q r s =
-    let la x = apply error x
-    Ok func |> la a |> la b |> la c |> la d |> la e |> la f |> la g |> la h |> la i |> la j |> la k |> la l |> la m |> la n |> la o |> la p |> la q |> la r |> la s
+let Map19 func a b c d e f g h i j k l m n o p q r s =
+    Ok func |> Apply a |> Apply b |> Apply c |> Apply d |> Apply e |> Apply f |> Apply g |> Apply h |> Apply i |> Apply j |> Apply k |> Apply l |> Apply m |> Apply n |> Apply o |> Apply p |> Apply q |> Apply r |> Apply s
 
-let Map20 func error a b c d e f g h i j k l m n o p q r s t =
-    let la x = apply error x
-    Ok func |> la a |> la b |> la c |> la d |> la e |> la f |> la g |> la h |> la i |> la j |> la k |> la l |> la m |> la n |> la o |> la p |> la q |> la r |> la s |> la t
+let Map20 func a b c d e f g h i j k l m n o p q r s t =
+    Ok func |> Apply a |> Apply b |> Apply c |> Apply d |> Apply e |> Apply f |> Apply g |> Apply h |> Apply i |> Apply j |> Apply k |> Apply l |> Apply m |> Apply n |> Apply o |> Apply p |> Apply q |> Apply r |> Apply s |> Apply t
 
 //Python generation code
 //------------------------------------------------------------------------
 //offset = 97
 //def create(lenght):
 //    letters = " ".join([chr(x+offset) for x in range(lenght)])
-//    applies = " ".join(["|> la {}".format(chr(x+offset)) for x in range(lenght)])
-//    return """let Map{} func error {} =
-//    let la x = apply error x
+//    applies = " ".join(["|> Apply {}".format(chr(x+offset)) for x in range(lenght)])
+//    return """let Map{} func {} =
 //    Ok func {}""".format(
-//        lenght, 
+//        lenght,
 //        letters,
 //        applies)
 
-//file = open("text.fs","w")
+//file = open("GeneratedCode.fs","w")
 //for i in range(1, 21):
 //    file.write(create(i))
 //    file.write("\n\n")
