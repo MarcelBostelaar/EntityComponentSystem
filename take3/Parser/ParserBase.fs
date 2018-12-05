@@ -1,61 +1,61 @@
 ﻿module ParserBase
 
-open FSharp.Data
 open ParserErrors
 open ResultHelperFunctions
-open System
+open ParsedDataStructure
 
-let MatchString jsonvalue =
-    match jsonvalue with 
-    | JsonValue.String x -> Ok x
-    | _ -> CreateRootErrorMessage TypeNames.String jsonvalue
+let MatchString data =
+    match data with 
+    | ParsedData.String x -> Ok x
+    | _ -> CreateRootTypeMismatchErrorResult TypeNames.String data
 
-let MatchBool jsonvalue =
-    match jsonvalue with 
-    | JsonValue.Boolean x -> Ok x
-    | _ -> CreateRootErrorMessage TypeNames.Boolean jsonvalue
+let MatchBool data =
+    match data with 
+    | ParsedData.Boolean x -> Ok x
+    | _ ->  CreateRootTypeMismatchErrorResult TypeNames.Boolean data
 
-let MatchFloat jsonvalue =
-    match jsonvalue with 
-    | JsonValue.Number x -> float x |> Ok
-    | JsonValue.Float x -> Ok x
-    | _ -> CreateRootErrorMessage TypeNames.Float jsonvalue
+let MatchFloat data =
+    match data with 
+    | ParsedData.Float x -> Ok x
+    | _ -> CreateRootTypeMismatchErrorResult TypeNames.Float data
 
-let MatchInt jsonvalue =
-    match MatchFloat jsonvalue with
-    | Error _ -> CreateRootErrorMessage TypeNames.Integer jsonvalue
-    | Ok x -> if x % 1.0 = 0.0 then int x |> Ok else CreateRootErrorMessage TypeNames.Integer jsonvalue
+let MatchInt data =
+    match MatchFloat data with
+    | Error _ -> CreateRootTypeMismatchErrorResult TypeNames.Integer data
+    | Ok x -> if x % 1.0 = 0.0 then int x |> Ok else CreateRootTypeMismatchErrorResult TypeNames.Integer data
 
-let MatchList f jsonvalue = 
-    match jsonvalue with
-    | JsonValue.Array x -> Array.toList x |>  List.map f |> Ok
-    | _ -> CreateRootErrorMessage TypeNames.Array jsonvalue
+let MatchList f data = 
+    match data with
+    | ParsedData.List x -> List.map f |> Ok
+    | _ -> CreateRootTypeMismatchErrorResult TypeNames.List data
 
-let MatchRecord jsonvalue =
-    match jsonvalue with
-    | JsonValue.Record x -> Array.toList x |> Ok
-    | _ -> CreateRootErrorMessage TypeNames.Record jsonvalue
+let MatchRecord data =
+    match data with
+    | ParsedData.Record x -> Ok x
+    | _ -> CreateRootTypeMismatchErrorResult TypeNames.Record data
 
-let MatchRecordEntry name (valuematch : JsonValue -> Result<'output, ErrorTrace>) (recordentry : string * JsonValue) =
+let MatchRecordEntry name valuematch recordentry =
     if fst recordentry <> name
-    then String.Format("Expected record entry to have name '{0}', has name '{1}' instead", name, fst recordentry) |> RootErrorResult
+    then CreateRootNameMismatchErrorResult name (fst recordentry)
     else valuematch <| snd recordentry
-
-let MatchEntryInRecord (matcher : string * JsonValue -> Result<'a, ErrorTrace>) (entries : (string * JsonValue) list) =
-    let resultsandvalue = (fun x -> matcher x, x) |> List.map <| entries
-    let resultsonly list = List.map fst list
-    if resultsonly resultsandvalue |> IsSingleOk
-    then 
-        let matchremoved = List.where (fun x -> fst x |> IsError) resultsandvalue |> List.map snd
-        resultsonly resultsandvalue |> SingleOk |> Result.map (fun x -> x , matchremoved)
-    else 
-        if resultsonly resultsandvalue |> IsMultiOk
-        then RootError "A matcher matched multiple entries, it should only match one" |> Error
-        else ("No matches were found for an entry" , (resultsonly resultsandvalue |> ExtractErrors |> MultiError)) |> ParentError |> Error
-
+    
 let maketuple a b = a,b
 
-let MakeTuple2Result a b = Map2 maketuple "Making Tuple" a b
+let MakeTuple2Result a b = Map2 maketuple a b
+
+let MatchEntryInRecord matcher (entries : (string* ParsedData) list) =
+    let resultsandvalue = (fun x -> matcher x, x) |> List.map <| entries
+    let resultsonly list = List.map fst list
+    match (resultsonly resultsandvalue).Length with
+    | 0 -> (ErrorDescription.String "No matches were found for an entry" , (resultsonly resultsandvalue |> ExtractErrors |> MultiError)) |> ParentError |> Error
+    | 1 ->
+        let matchremoved = List.where (fun x -> fst x |> IsError) resultsandvalue |> List.map snd //all unmatched entries
+        let matchedvalue = (resultsonly resultsandvalue |> SingleOk).Value //the matched value
+        Result.map (fun x -> x, matchremoved) matchedvalue
+    | _ ->
+        let isfirstok a = (fun x -> fst x) a |> IsOk
+        List.filter isfirstok resultsandvalue |> List.map snd |> MultipleMatched |> RootError |> Error
+
 
 let TupleSecondApply (f: 'a list -> ('b*('a list))) tuple =
     let first = fst tuple
@@ -63,17 +63,17 @@ let TupleSecondApply (f: 'a list -> ('b*('a list))) tuple =
     let result = f second
     (first, fst result), snd result
 
-let TupleSecondApplyBound (f: Result<'input,ErrorTrace> -> Result<'output1 * 'output2,ErrorTrace>) (tuple : Result<'x*'input, ErrorTrace>) =
+let TupleSecondApplyBound (f: Result<'input,ErrorTrace<ErrorDescription>> -> Result<'output1 * 'output2,ErrorTrace<ErrorDescription>>) (tuple : Result<'x*'input, ErrorTrace<ErrorDescription>>) =
     let first = Result.map fst tuple
     let result = f <| Result.map snd tuple
     let output1 = Result.map fst result
     let output2 = Result.map snd result
     MakeTuple2Result first <| output1 |> MakeTuple2Result  <| output2
 
-let MatchStringBound = Bind MatchString "In MatchString"
-let MatchBoolBound = Bind MatchBool "In MatchBool"
-let MatchFloatBound = Bind MatchFloat "In MatchFloat"
-let MatchIntBound = Bind MatchInt "In MatchInt"
-let MatchListBound f = Bind (MatchList f) "In MatchList"
-let MatchRecordEntryBound name valuematch = Bind (MatchRecordEntry name valuematch) "In MatchRecordEntry"
-let MatchRecordBound  = Bind MatchRecord "In MatchRecord"
+let MatchStringBound = BindString MatchString "In MatchString"
+let MatchBoolBound = BindString MatchBool "In MatchBool"
+let MatchFloatBound = BindString MatchFloat "In MatchFloat"
+let MatchIntBound = BindString MatchInt "In MatchInt"
+let MatchListBound f = BindString (MatchList f) "In MatchList"
+let MatchRecordEntryBound name valuematch = BindString (MatchRecordEntry name valuematch) "In MatchRecordEntry"
+let MatchRecordBound  = BindString MatchRecord "In MatchRecord"

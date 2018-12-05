@@ -9,13 +9,15 @@ let Bind f error value=
         | Ok y -> Ok y
         | Error y -> (error, y) |> ParentError |> Error
     | Error x -> Error x
+
+let BindString f error value= Bind f (ErrorDescription.String error) value
     
 let Apply x f =
     match f with
-    | Error i -> i
+    | Error i -> Error i
     | Ok i ->
         match x with
-        | Error j -> j
+        | Error j -> Error j
         | Ok j -> i j |> Ok
     
 let OptionOfError result = 
@@ -52,12 +54,12 @@ let FirstOk resultlist =
 
 let SingleOk resultlist =
     let oks = List.choose OptionOfOk resultlist
-    if oks.Length = 1 then Ok oks.Head else "List contains multiple positive results where one is expected" |> RootErrorResult
+    if oks.Length = 1 then Ok oks.Head |> Some else None
 
 let IsSingleOk resultlist =
     match SingleOk resultlist with
-    | Ok _ -> true
-    | Error _ -> false
+    | Some _ -> true
+    | None _ -> false
     
 let AllOk resultlist =
     List.exists IsError resultlist |> not

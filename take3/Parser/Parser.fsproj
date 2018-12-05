@@ -13,8 +13,4 @@
     <Compile Include="RecordChainer.fs" />
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="FSharp.Data" Version="3.0.0" />
-  </ItemGroup>
-
 </Project>
