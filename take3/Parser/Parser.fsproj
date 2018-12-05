@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="ListHelperFunctions.fs" />
+    <Compile Include="ParsedDataStructure.fs" />
     <Compile Include="TypeNames.fs" />
     <Compile Include="ParserErrors.fs" />
     <Compile Include="ResultHelperFunctions.fs" />

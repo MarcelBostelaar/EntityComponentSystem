@@ -1,6 +1,6 @@
 ﻿module ParserErrors
 open System
-open FSharp.Data
+open ParsedDataStructure
 
 type ErrorTrace=
     | RootError of string
@@ -10,23 +10,22 @@ type ErrorTrace=
 let IntOrFloat (number : float) =
     if number % 1.0 = 0.0 then TypeNames.Integer else TypeNames.Float
 
-let rec ValueName jsonvalue = 
-    match jsonvalue with
-    | JsonValue.String _ -> TypeNames.String
-    | JsonValue.Number x -> IntOrFloat (float x)
-    | JsonValue.Float x -> IntOrFloat x
-    | JsonValue.Array _ -> TypeNames.Array
-    | JsonValue.Boolean _ -> TypeNames.Boolean
-    | JsonValue.Null _ -> TypeNames.Null
-    | JsonValue.Record record -> 
-        let NameRecordEntry (entry : string * JsonValue) = String.Format("{0} : {1}", fst entry, ValueName <| snd entry)
-        let concatted = Array.map NameRecordEntry record |> String.concat ",\n"
+let rec ValueName data = 
+    match data with
+    | ParsedData.String _ -> TypeNames.String
+    | ParsedData.Float x -> IntOrFloat x
+    | ParsedData.List _ -> TypeNames.List
+    | ParsedData.Boolean _ -> TypeNames.Boolean
+    | ParsedData.Null _ -> TypeNames.Null
+    | ParsedData.Record record -> 
+        let NameRecordEntry entry = String.Format("{0} : {1}", fst entry, ValueName <| snd entry)
+        let concatted = List.map NameRecordEntry record |> String.concat ",\n"
         String.Format("{{0}}", concatted)
 
-let CreateErrorMessage (expectedtype : string) (actualvalue : JsonValue) =
+let CreateErrorMessage (expectedtype : string) actualvalue =
     String.Format("Expected {0}, got {1} instead", expectedtype, ValueName actualvalue)
 
-let CreateRootErrorMessage(expectedtype : string) (actualvalue : JsonValue) =
+let CreateRootErrorMessage(expectedtype : string) actualvalue =
     CreateErrorMessage expectedtype actualvalue |> RootError |> Error
     
 let RootErrorResult message = message |> RootError |> Error
