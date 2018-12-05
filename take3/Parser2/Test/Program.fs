@@ -7,7 +7,7 @@ open ParserErrors
 open ResultHelperFunctions
 open RecordChainer
 
-type Point = { x: int; y: int }
+type Point = { x: int; y: string }
 
 [<EntryPoint>]
 let main argv =
@@ -40,7 +40,7 @@ let main argv =
     let BuildPoint2 x y= {x=x ; y=y}
 
     let matchx = MatchRecordEntry "x" MatchInt
-    let matchy = MatchRecordEntry "y" MatchInt
+    let matchy = MatchRecordEntry "y" MatchString
 
     let MatchPoint2 = MatchBuild2 BuildPoint2 matchx matchy
 
