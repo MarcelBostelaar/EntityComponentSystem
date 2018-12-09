@@ -1,11 +1,8 @@
 ﻿// Learn more about F# at http://fsharp.org
 
-open System
-open FSharp.Data
 open ParserBase
-open ParserErrors
-open ResultHelperFunctions
-open RecordChainer
+open MatchBuild
+open ParsedDataStructure
 
 type Point = { x: int; y: string }
 
@@ -24,7 +21,7 @@ let main argv =
   }
 }
 """
-    let parsed = JsonValue.TryParse exampleJson |> OptionToResult (ErrorDescription.String "Could not parse json")
+    let parsed = JsonParsedDataConverter.ParseJson exampleJson
 
     let BuildPoint2 x y= {x=x ; y=y}
 
