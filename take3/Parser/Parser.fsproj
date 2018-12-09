@@ -12,6 +12,7 @@
     <Compile Include="ResultMap.fs" />
     <Compile Include="ParserBase.fs" />
     <Compile Include="RecordChainer.fs" />
+    <Compile Include="MatchBuild.fs" />
   </ItemGroup>
 
 </Project>
