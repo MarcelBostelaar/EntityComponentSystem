@@ -9,7 +9,9 @@ Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "JsonToParsedData", "JsonToP
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gametest", "Gametest\Gametest.csproj", "{DC13C136-2BE5-4767-A5FE-64E2E8A3A067}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "testenvironmentfsharp", "testenvironmentfsharp\testenvironmentfsharp.fsproj", "{E4A0859E-5B29-449F-BDA0-22F029761359}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "testenvironmentfsharp", "testenvironmentfsharp\testenvironmentfsharp.fsproj", "{E4A0859E-5B29-449F-BDA0-22F029761359}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "GenerateClasses", "GenerateClasses\GenerateClasses.fsproj", "{4ADF9C38-132C-4DC2-8E4D-0C61920DA38B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -50,6 +52,14 @@ Global
 		{E4A0859E-5B29-449F-BDA0-22F029761359}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E4A0859E-5B29-449F-BDA0-22F029761359}.Release|x86.ActiveCfg = Release|Any CPU
 		{E4A0859E-5B29-449F-BDA0-22F029761359}.Release|x86.Build.0 = Release|Any CPU
+		{4ADF9C38-132C-4DC2-8E4D-0C61920DA38B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4ADF9C38-132C-4DC2-8E4D-0C61920DA38B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4ADF9C38-132C-4DC2-8E4D-0C61920DA38B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4ADF9C38-132C-4DC2-8E4D-0C61920DA38B}.Debug|x86.Build.0 = Debug|Any CPU
+		{4ADF9C38-132C-4DC2-8E4D-0C61920DA38B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4ADF9C38-132C-4DC2-8E4D-0C61920DA38B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4ADF9C38-132C-4DC2-8E4D-0C61920DA38B}.Release|x86.ActiveCfg = Release|Any CPU
+		{4ADF9C38-132C-4DC2-8E4D-0C61920DA38B}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

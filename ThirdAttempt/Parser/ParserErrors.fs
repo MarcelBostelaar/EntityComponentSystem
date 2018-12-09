@@ -29,3 +29,4 @@ let CreateRootNameMismatchErrorResult expected actual =
     
 let RootErrorResult message = message |> RootError |> Error
 let MultiErrorResult message = message |> MultiError |> Error
+let ParentErrorResult parent child = (parent , child) |> ParentError |> Error
