@@ -5,9 +5,6 @@ open ResultHelperFunctions
 open ParserErrors
 open ParsedDataStructure
 
-let private MapTupleSnd f tuple =
-    fst tuple, f (snd tuple)
-
 let private parseJson jsonstring =
     JsonValue.TryParse(jsonstring) |> OptionToResult (ErrorDescription.String "Could not parse json")
 
@@ -19,7 +16,7 @@ let rec private jsonToData parsedJson =
     | JsonValue.Float x -> ParsedData.Float x
     | JsonValue.Null -> ParsedData.Null
     | JsonValue.Array x -> Array.map jsonToData x |> Array.toList |> ParsedData.List
-    | JsonValue.Record x -> MapTupleSnd jsonToData |> Array.map <| x |> Array.toList |> ParsedData.Record
+    | JsonValue.Record x -> TupleMaps.MapTupleSnd jsonToData |> Array.map <| x |> Array.toList |> ParsedData.Record
 
 let ParseJson jsonstring =
     parseJson jsonstring |> Result.map jsonToData
@@ -32,7 +29,7 @@ let rec private DataToJson parseddata =
     | ParsedData.Float x -> JsonValue.Float x
     | ParsedData.Null -> JsonValue.Null
     | ParsedData.List x -> List.map DataToJson x |> List.toArray |> JsonValue.Array
-    | ParsedData.Record x -> MapTupleSnd DataToJson |> List.map <| x |> List.toArray |> JsonValue.Record
+    | ParsedData.Record x -> TupleMaps.MapTupleSnd DataToJson |> List.map <| x |> List.toArray |> JsonValue.Record
 
 let ParsedDataToJson parseddata=
     (DataToJson parseddata).ToString JsonSaveOptions.None

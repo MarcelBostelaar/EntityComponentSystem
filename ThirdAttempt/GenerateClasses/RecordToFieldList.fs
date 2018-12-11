@@ -1,21 +1,19 @@
-﻿module Parser
+﻿module RecordToFieldList
 
 open ParserBase
 open ResultHelperFunctions
 open ParserErrors
 open ResultMap
 
-type field = {name: string; typename:string}
+type ParsedField = {name: string; typename:string}
+type FieldAllInfo = {fieldname: string; typename:string; typematcher: string ;serializername: string}
 let private buildfield x = {name= fst x; typename = snd x}
-
-let private maptuplesnd f tuple =
-    fst tuple, f (snd tuple)
 
 let private flattentupleresultinsnd tuple =
     MakeTuple2Result (Ok (fst tuple)) (snd tuple)
 
 let private recordentrystring entry =
-    maptuplesnd MatchString entry |> flattentupleresultinsnd
+    TupleMaps.MapTupleSnd MatchString entry |> flattentupleresultinsnd
 
 let private allentriesstring entries =
     let allresults = List.map recordentrystring entries

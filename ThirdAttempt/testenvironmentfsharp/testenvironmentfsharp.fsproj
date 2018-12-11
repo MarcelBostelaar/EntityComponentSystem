@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="generatedexampleclass.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 
