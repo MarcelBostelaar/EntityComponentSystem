@@ -4,9 +4,8 @@ open ParserBase
 open ResultHelperFunctions
 open ParserErrors
 open ResultMap
+open Types
 
-type ParsedField = {name: string; typename:string}
-type FieldAllInfo = {fieldname: string; typename:string; typematcher: string ;serializername: string}
 let private buildfield x = {name= fst x; typename = snd x}
 
 let private flattentupleresultinsnd tuple =

@@ -2,25 +2,19 @@
 
 open RecordChainer
 open ParserBase
+open System
 
-//Python generation code
-//------------------------------------------------------------------------
-//offset = 97
-//def create(lenght):
-//    letters = " ".join([chr(x+offset) for x in range(lenght)])
-//    chainify_unreversed = ["chainify {} |>".format(chr(x+offset)) for x in range(lenght)]
-//    chainify_unreversed.reverse()
-//    chainify = " ".join(chainify_unreversed)
-//    applychain = " ".join(["ApplyChain |>" for x in range(lenght)])
-//    return """let MatchBuild{} func {} json=
-//    let nested_tuples = MatchRecord json |> EntryChainStarter |> {} EntryChainFinisher
-//    ApplyChainStart (Ok func) nested_tuples |> {} ApplyChainFinish""".format(lenght, letters, chainify, applychain)
-
-//file = open("generatedcode.fs","w")
-//for i in range(1, 21):
-//    file.write(create(i))
-//    file.write("\n\n")
-//-----------------------------------------------------------------------
+let GenerateMatchBuild lenght =
+    String.Format(
+"""let MatchBuild{0} func {1} data =
+    let nested_tuples = MatchRecord data |> EntryChainStarter |> {2} EntryChainFinisher
+    ApplyChainStart (Ok func) nested_tuples |> {3} ApplyChainFinish
+    """,
+    lenght.ToString(),
+    List.map (fun x -> "entry" + x.ToString()) [1 .. lenght] |> String.concat " ",
+    List.map (fun x -> "chainify entry" + x.ToString() + " |>") [lenght .. -1 .. 1] |> String.concat " ",
+    List.map (fun x -> "ApplyChain |>") [1 .. lenght] |> String.concat " "
+    )
 
 let MatchBuild1 func a data=
     let nested_tuples = MatchRecord data |> EntryChainStarter |> chainify a |> EntryChainFinisher

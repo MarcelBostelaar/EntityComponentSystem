@@ -2,6 +2,8 @@
 
 open RecordToFieldList
 open System
+open MatchBuild
+open Types
 
 let private buildfieldtypedefinition (field:FieldAllInfo) = field.fieldname + ": " + field.typename
 

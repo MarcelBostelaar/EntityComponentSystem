@@ -17,7 +17,7 @@ let main argv =
     let writer = StreamWriter("F:/Projects/EntityComponentSystem/ThirdAttempt/testenvironmentfsharp/generatedexampleclass.fs")
     writer.Write(
 "module TestType
-open MatchBuild
+open RecordChainer
 open ParserBase
 open ParsedDataStructure\n\n")
     writer.Write((BuildFullType "TestType" examplefields))
@@ -26,5 +26,5 @@ open ParsedDataStructure\n\n")
 
 
     //Console.Write (String.Format("type {0} = {{ {1} }}", "typename", "here be types"))
-    Console.ReadKey true
+    //Console.ReadKey true
     0 // return an integer exit code
