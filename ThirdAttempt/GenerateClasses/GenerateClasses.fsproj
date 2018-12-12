@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="TopologicalSort\KahnsAlgorithm.fs" />
     <Compile Include="Types.fs" />
     <Compile Include="RecordToFieldList.fs" />
     <Compile Include="TypeBuilder.fs" />
