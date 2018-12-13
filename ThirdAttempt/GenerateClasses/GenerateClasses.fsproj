@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="TopologicalSort\KahnsAlgorithm.fs" />
+    <Compile Include="TopologicalSortFsharp.fs" />
     <Compile Include="Types.fs" />
     <Compile Include="RecordToFieldList.fs" />
     <Compile Include="TypeBuilder.fs" />
@@ -17,6 +17,7 @@
   <ItemGroup>
     <ProjectReference Include="..\JsonToParsedData\JsonToParsedData.fsproj" />
     <ProjectReference Include="..\Parser\ParserBase.fsproj" />
+    <ProjectReference Include="..\TopologicalSort\TopologicalSort.csproj" />
   </ItemGroup>
 
 </Project>
