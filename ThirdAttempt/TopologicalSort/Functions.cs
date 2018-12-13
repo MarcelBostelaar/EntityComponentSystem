@@ -7,20 +7,46 @@ namespace TopologicalSort
 {
     public static class Functions
     {
-        private static void BuildTree<ID, T>(List<Tuple<List<ID>, Node<ID, T>>> nodes, Func<ID, ID, bool> equals)
+
+
+        public static Tuple<IEnumerable<Node<ID, T>>, IEnumerable<Node<ID, T>>> TopologicalSort<T,ID>(IEnumerable<T> values, Func<T, ID> id_grabber, Func<T, IEnumerable<ID>> dependency_grabber, Func<ID,ID,bool> ID_equality)
         {
-            foreach (var node in nodes)
+            var allids = values.Select(id_grabber);
+            var alldependencies = values.Select(dependency_grabber).SelectMany(x => x);
+            if (! allids.All(single => allids.Where(x => ID_equality(single, x)).Count() == 1))
+            {
+                throw new Exception("Ids are not unique");
+            }
+            if(! alldependencies.All(x => allids.Where(y => ID_equality(x,y)).Count() == 1))
+            {
+                throw new Exception("Some dependencies do not exist as an ID in the values");
+            }
+            var halfnodes = BuildNodesNoDependencies(values, id_grabber, dependency_grabber);
+            AddDependencies(halfnodes, ID_equality);
+            var nodes = halfnodes.Select(x => x.Item2);
+            return KahnsAlgorithm(nodes);
+        }
+
+        private static IEnumerable<Tuple<IEnumerable<ID>, Node<ID, T>>> BuildNodesNoDependencies<ID, T>(IEnumerable<T> values, Func<T, ID> id_grabber, Func<T, IEnumerable<ID>> dependency_grabber)
+        {
+            var nodes = values.Select(x => new Node<ID,T>(id_grabber(x), x)).ToList();
+            return nodes.Select(x => new Tuple<IEnumerable<ID>, Node<ID, T>>(dependency_grabber(x.value), x)).ToList();
+        }
+
+        private static void AddDependencies<ID, T>(IEnumerable<Tuple<IEnumerable<ID>, Node<ID, T>>> halfnodes, Func<ID, ID, bool> equals)
+        {
+            foreach (var node in halfnodes)
             {
                 foreach (var dependencyid in node.Item1)
                 {
-                    var dependencynode = nodes.Find(x => equals(x.Item2.id, dependencyid));
+                    var dependencynode = halfnodes.Where(x => equals(x.Item2.id, dependencyid)).First();
                     dependencynode.Item2.incoming_dependencies++;
                     node.Item2.dependencies.Add(dependencynode.Item2);
                 }
             }
         }
 
-        private static Tuple<List<Node<ID, T>>, List<Node<ID, T>>> KahnsAlgorithm<ID, T>(List<Node<ID, T>> nodes)
+        private static Tuple<IEnumerable<Node<ID, T>>, IEnumerable<Node<ID, T>>> KahnsAlgorithm<ID, T>(IEnumerable<Node<ID, T>> nodes)
         {
             var nodependency = nodes.Where(x => x.incoming_dependencies == 0).ToList();
             var tosort = nodes.ToList();
@@ -45,7 +71,7 @@ namespace TopologicalSort
                     }
                 }
             }
-            return new Tuple<List<Node<ID, T>>, List<Node<ID, T>>>(sorted, tosort);
+            return new Tuple<IEnumerable<Node<ID, T>>, IEnumerable<Node<ID, T>>>(sorted, tosort);
         }
     }
 }
