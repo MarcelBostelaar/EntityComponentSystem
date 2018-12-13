@@ -18,5 +18,5 @@ let private WrappedSort id_selecter dependency_selecter equality_function values
 let Sort id_selecter dependency_selecter equality_function values=
     let result = WrappedSort id_selecter dependency_selecter equality_function values
     match System.Linq.Enumerable.Count (snd result) with
-    | 0 -> fst result |> Seq.map (fun x -> x.value) |> Seq.toList |> Ok
-    | _ -> snd result |> Seq.map (fun x -> x.value) |> Seq.toList |> Error
+    | 0 -> fst result |> Seq.toList |> Ok
+    | _ -> snd result |> Seq.toList |> Error

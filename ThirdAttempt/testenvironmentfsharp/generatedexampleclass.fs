@@ -3,11 +3,6 @@ open RecordChainer
 open ParserBase
 open ParsedDataStructure
 
-let MatchBuild3 func entry1 entry2 entry3 data =
-    let nested_tuples = MatchRecord data |> EntryChainStarter |> chainify entry3 |> chainify entry2 |> chainify entry1 |> EntryChainFinisher
-    ApplyChainStart (Ok func) nested_tuples |> ApplyChain |> ApplyChain |> ApplyChain |> ApplyChainFinish
-    
-
 type TestType = { 
     field1: int;
     field2: float;

@@ -7,30 +7,29 @@ namespace TopologicalSort
 {
     public static class Functions
     {
-
-
-        public static Tuple<IEnumerable<Node<ID, T>>, IEnumerable<Node<ID, T>>> TopologicalSort<T,ID>(IEnumerable<T> values, Func<T, ID> id_grabber, Func<T, IEnumerable<ID>> dependency_grabber, Func<ID,ID,bool> ID_equality)
+        public static Tuple<IEnumerable<T>, IEnumerable<T>> TopologicalSort<T,ID>(IEnumerable<T> values, Func<T, ID> id_grabber, Func<T, IEnumerable<ID>> dependency_grabber, Func<ID,ID,bool> ID_equality)
         {
             var allids = values.Select(id_grabber);
             var alldependencies = values.Select(dependency_grabber).SelectMany(x => x);
-            if (! allids.All(single => allids.Where(x => ID_equality(single, x)).Count() == 1))
+            if (! allids.Distinct(ID_equality))
             {
                 throw new Exception("Ids are not unique");
             }
-            if(! alldependencies.All(x => allids.Where(y => ID_equality(x,y)).Count() == 1))
+            if(! alldependencies.All(x => allids.Contains(x, ID_equality)))
             {
                 throw new Exception("Some dependencies do not exist as an ID in the values");
             }
             var halfnodes = BuildNodesNoDependencies(values, id_grabber, dependency_grabber);
             AddDependencies(halfnodes, ID_equality);
             var nodes = halfnodes.Select(x => x.Item2);
-            return KahnsAlgorithm(nodes);
+            var sorted_and_error = KahnsAlgorithm(nodes);
+            return new Tuple<IEnumerable<T>, IEnumerable<T>>(sorted_and_error.Item1.Select(x => x.value).Evaluate(), sorted_and_error.Item2.Select(x => x.value).Evaluate());
         }
 
         private static IEnumerable<Tuple<IEnumerable<ID>, Node<ID, T>>> BuildNodesNoDependencies<ID, T>(IEnumerable<T> values, Func<T, ID> id_grabber, Func<T, IEnumerable<ID>> dependency_grabber)
         {
-            var nodes = values.Select(x => new Node<ID,T>(id_grabber(x), x)).ToList();
-            return nodes.Select(x => new Tuple<IEnumerable<ID>, Node<ID, T>>(dependency_grabber(x.value), x)).ToList();
+            var nodes = values.Select(x => new Node<ID, T>(id_grabber(x), x)).Evaluate();
+            return nodes.Select(x => new Tuple<IEnumerable<ID>, Node<ID, T>>(dependency_grabber(x.value), x)).Evaluate();
         }
 
         private static void AddDependencies<ID, T>(IEnumerable<Tuple<IEnumerable<ID>, Node<ID, T>>> halfnodes, Func<ID, ID, bool> equals)

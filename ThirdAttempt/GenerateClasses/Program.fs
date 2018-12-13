@@ -3,6 +3,7 @@
 open System
 open TypeBuilder
 open RecordToFieldList
+open Types
 open System.IO
 
 [<EntryPoint>]
