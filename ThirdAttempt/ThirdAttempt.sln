@@ -15,7 +15,9 @@ Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "GenerateClasses", "Generate
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TopologicalSort", "TopologicalSort\TopologicalSort.csproj", "{4EC46A95-2C28-45AA-AFCD-098E0E15C069}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Csharptestenvironment", "Csharptestenvironment\Csharptestenvironment.csproj", "{A59A5C91-00CF-4A4B-AE8A-E88E0EEADA34}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Csharptestenvironment", "Csharptestenvironment\Csharptestenvironment.csproj", "{A59A5C91-00CF-4A4B-AE8A-E88E0EEADA34}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ClassGenerator", "ClassGenerator", "{F8DAA54A-6368-4774-BB26-F4E3A04F4D34}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -83,6 +85,10 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{4ADF9C38-132C-4DC2-8E4D-0C61920DA38B} = {F8DAA54A-6368-4774-BB26-F4E3A04F4D34}
+		{4EC46A95-2C28-45AA-AFCD-098E0E15C069} = {F8DAA54A-6368-4774-BB26-F4E3A04F4D34}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {348340DB-A5E6-4EA7-821B-6A5CF1E42937}

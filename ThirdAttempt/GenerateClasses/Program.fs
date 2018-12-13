@@ -14,7 +14,6 @@ let main argv =
         makefield "field2" "float" "MatchFloat" "SerializeFloat";
         makefield "field3" "bool" "MatchBool" "SerializeBool"]
     
-    // make sure a matchbuild with the right size exists by generating it in this library and including it as its own file in the generated library. Make an f# version of the generation code
     let writer = StreamWriter("F:/Projects/EntityComponentSystem/ThirdAttempt/testenvironmentfsharp/generatedexampleclass.fs")
     writer.Write(
 "module TestType
