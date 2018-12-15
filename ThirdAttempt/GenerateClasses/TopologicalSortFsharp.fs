@@ -31,7 +31,7 @@ let rec private SeqCountBy equality_func values =
     else
         let first = Seq.head values
         let count = Seq.where (fun x -> equality_func x first) values |> Seq.length
-        [first, count] :: (SeqCountBy equality_func (Seq.skipWhile (fun x -> equality_func x first) values))
+        [first, count] :: (SeqCountBy equality_func (Seq.where (fun x -> not <| equality_func x first) values))
     
 let private CheckIDUnique (id_selecter: 'value -> 'id) equality_function (values : 'value seq)=
     let countbyid = Seq.map id_selecter values |> SeqCountBy equality_function |> Seq.concat
@@ -45,7 +45,7 @@ let private Contains equalityFunc sequence value=
 let private CheckDependencyExists (id_selecter: 'value -> 'id) (dependency_selecter: 'value -> 'id seq) (equality_function: 'id -> 'id -> bool) (values : 'value seq) =
     let primaryIds = Seq.map id_selecter values
     let dependencies = Seq.map (fun x -> dependency_selecter x |> Seq.map (fun y -> x,y)) values |> Seq.concat
-    let nomatches = Seq.skipWhile (fun x -> Contains equality_function primaryIds (snd x)) dependencies
+    let nomatches = Seq.where (fun x -> not <| Contains equality_function primaryIds (snd x)) dependencies
     match Seq.length nomatches with
     | 0 -> Ok values
     | _ -> Dependencies_dont_exist nomatches |> Error
