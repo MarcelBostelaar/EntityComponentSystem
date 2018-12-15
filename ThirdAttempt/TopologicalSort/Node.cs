@@ -4,7 +4,7 @@ using System.Text;
 
 namespace TopologicalSort
 {
-    public class Node<ID, T>
+    class Node<ID, T>
     {
         public T value;
         public ID id;

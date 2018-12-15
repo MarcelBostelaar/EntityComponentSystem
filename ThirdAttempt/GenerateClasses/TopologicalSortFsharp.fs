@@ -1,7 +1,11 @@
 ﻿module TopologicalSortFsharp
 
-open TopologicalSort
 open System
+
+type Error<'id,'value>=
+    | Ids_not_unique of 'id seq 
+    | Dependencies_dont_exist of ('value*'id) seq
+    | Circular_dependencies_exist of 'value seq
 
 let private CreateFunc1 f =
     new Func<'a,'b>(f)
@@ -15,8 +19,38 @@ let private WrappedSort id_selecter dependency_selecter equality_function values
         CreateFunc1 dependency_selecter, 
         CreateFunc2 equality_function)
 
-let Sort id_selecter dependency_selecter equality_function values=
+let private Sort id_selecter (dependency_selecter: 'value -> 'id seq) equality_function (values: 'value seq)=
     let result = WrappedSort id_selecter dependency_selecter equality_function values
     match System.Linq.Enumerable.Count (snd result) with
     | 0 -> fst result |> Seq.toList |> Ok
-    | _ -> snd result |> Seq.toList |> Error
+    | _ -> snd result |> Circular_dependencies_exist |> Error
+
+let rec private SeqCountBy equality_func values =
+    if Seq.length values = 0 then
+        []
+    else
+        let first = Seq.head values
+        let count = Seq.where (fun x -> equality_func x first) values |> Seq.length
+        [first, count] :: (SeqCountBy equality_func (Seq.skipWhile (fun x -> equality_func x first) values))
+    
+let private CheckIDUnique (id_selecter: 'value -> 'id) equality_function (values : 'value seq)=
+    let countbyid = Seq.map id_selecter values |> SeqCountBy equality_function |> Seq.concat
+    match Seq.forall (fun x -> snd x = 1) countbyid with
+    | true -> Ok values
+    | false -> Seq.where (fun x -> snd x <> 1) countbyid |> Seq.map fst |> Ids_not_unique |> Error
+
+let private Contains equalityFunc sequence value=
+    Seq.map (equalityFunc value) sequence |> Seq.forall id
+
+let private CheckDependencyExists (id_selecter: 'value -> 'id) (dependency_selecter: 'value -> 'id seq) (equality_function: 'id -> 'id -> bool) (values : 'value seq) =
+    let primaryIds = Seq.map id_selecter values
+    let dependencies = Seq.map (fun x -> dependency_selecter x |> Seq.map (fun y -> x,y)) values |> Seq.concat
+    let nomatches = Seq.skipWhile (fun x -> Contains equality_function primaryIds (snd x)) dependencies
+    match Seq.length nomatches with
+    | 0 -> Ok values
+    | _ -> Dependencies_dont_exist nomatches |> Error
+
+let SortTopologically id_selecter dependency_selecter equality_function values =
+    CheckIDUnique id_selecter equality_function values |>
+    Result.bind (CheckDependencyExists id_selecter dependency_selecter equality_function) |> 
+    Result.bind (Sort id_selecter dependency_selecter equality_function)
