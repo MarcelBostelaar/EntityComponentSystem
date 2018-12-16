@@ -15,9 +15,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\JsonToParsedData\JsonToParsedData.fsproj" />
-    <ProjectReference Include="..\Parser\ParserBase.fsproj" />
     <ProjectReference Include="..\TopologicalSort\TopologicalSort.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="JsonToParsedData">
+      <HintPath>..\..\LibraryDlls\JsonToParsedData.dll</HintPath>
+    </Reference>
+    <Reference Include="ParserBase">
+      <HintPath>..\..\LibraryDlls\ParserBase.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

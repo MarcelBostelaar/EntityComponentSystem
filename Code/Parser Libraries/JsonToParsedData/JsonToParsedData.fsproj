@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Parser\ParserBase.fsproj" />
+    <ProjectReference Include="..\ParserBase\ParserBase.fsproj" />
   </ItemGroup>
 
 </Project>

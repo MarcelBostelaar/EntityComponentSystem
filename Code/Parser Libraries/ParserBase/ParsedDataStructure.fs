@@ -1,5 +1,7 @@
 ﻿module ParsedDataStructure
 
+open System
+
 type ParsedData =
     | String of string
     | Float of float
@@ -14,4 +16,11 @@ let rec PasteOver (baseData : ParsedData) (pasteData : ParsedData) =
     | _ , _ -> pasteData
 
 and PasteRecord (baseRecord : (string*ParsedData) list) (pasteRecord : (string*ParsedData) list) =
-    //pasteover data where names match
+
+    let RecordEntryPaste possiblereplacements entry=
+        match List.where (fun x -> fst x = fst entry) possiblereplacements with
+        | [] -> entry
+        | [replacement] -> fst entry, PasteOver (snd entry) (snd replacement)
+        | _ -> raise (Exception("There ought not to be records with identical names"))
+
+    List.map (RecordEntryPaste pasteRecord) baseRecord
