@@ -14,7 +14,7 @@ let main argv =
         makefield "field2" "float" "MatchFloat" "SerializeFloat";
         makefield "field3" "bool" "MatchBool" "SerializeBool"]
     
-    let writer = StreamWriter("F:/Projects/EntityComponentSystem/ThirdAttempt/testenvironmentfsharp/generatedexampleclass.fs")
+    let writer = new StreamWriter("F:/Projects/EntityComponentSystem/ThirdAttempt/testenvironmentfsharp/generatedexampleclass.fs")
     writer.Write(
 "module TestType
 open RecordChainer
