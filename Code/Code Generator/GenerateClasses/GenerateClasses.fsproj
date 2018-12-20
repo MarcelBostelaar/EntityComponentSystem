@@ -6,12 +6,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="klad.fs" />
     <Compile Include="TopologicalSortFsharp.fs" />
     <Compile Include="Types.fs" />
     <Compile Include="RecordToFieldList.fs" />
     <Compile Include="TypeBuilder.fs" />
     <Compile Include="BuildOrchestrator.fs" />
+    <Compile Include="klad.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 
