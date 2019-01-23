@@ -6,18 +6,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="ErrorUnion.fs" />
     <Compile Include="VersionParserCode\klad.fs" />
     <Compile Include="Types.fs" />
     <Compile Include="RecordToFieldList.fs" />
-    <Compile Include="TypeBuilder.fs" />
-    <Compile Include="BuildOrchestrator.fs" />
+    <Compile Include="placeholderfilename.fs" />
+    <Compile Include="TypeBuilder.old.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\JsonToParsedData\JsonToParsedData.fsproj" />
     <ProjectReference Include="..\ParserBase\ParserBase.fsproj" />
-    <ProjectReference Include="..\TopologicalSort\TopologicalSortCsharp.csproj" />
+    <ProjectReference Include="..\TopologicalSortFsharp\TopologicalSortFsharp.fsproj" />
   </ItemGroup>
 
 </Project>

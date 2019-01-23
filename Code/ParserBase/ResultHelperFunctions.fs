@@ -79,3 +79,10 @@ let OptionToResult error option=
     match option with
     | Some x -> Ok x
     | None -> RootError error |> Error
+
+let OnlyOk (x : Result<'a, ErrorTrace<'error>> list) =
+    let errors = ExtractErrors x
+    match errors.Length with
+    | 0 -> ExtractOks x |> Ok
+    | 1 -> errors.Head |> Error
+    | _ -> MultiError errors |> Error

@@ -2,10 +2,9 @@
 
 open System
 open TypeBuilder
-open RecordToFieldList
 open Types
 open System.IO
-open RecordTransform
+open placeholderfilename
 
 
 [<EntryPoint>]
@@ -14,14 +13,18 @@ let main argv =
 (*
 Roadplan for parsing:
     Programmer:
-    Define buildin type parser
+    Define buildin type parser in dictionairy met naam - functionnaam
 
     Program:
     Read all fields
-
+    Turn them into name-type pairs
+    Topologisch sort de nametype pairs met de buildins als dependencyless -> return error als er een fout is
+    Maak serialiser/deserialiser/scaffolding voor elke type in volgorde en voeg de namen toe aan de dictionairy
 
 
 *)
+    
+
 
 
     let makefield name typename typematcher serializername = {fieldname = name; typename = typename; serializername = serializername; typematcher = typematcher}
