@@ -6,26 +6,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="TopologicalSortFsharp.fs" />
+    <Compile Include="VersionParserCode\klad.fs" />
     <Compile Include="Types.fs" />
     <Compile Include="RecordToFieldList.fs" />
     <Compile Include="TypeBuilder.fs" />
     <Compile Include="BuildOrchestrator.fs" />
-    <Compile Include="klad.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TopologicalSort\TopologicalSort.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="JsonToParsedData">
-      <HintPath>..\..\..\LibraryDlls\JsonToParsedData.dll</HintPath>
-    </Reference>
-    <Reference Include="ParserBase">
-      <HintPath>..\..\..\LibraryDlls\ParserBase.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\JsonToParsedData\JsonToParsedData.fsproj" />
+    <ProjectReference Include="..\ParserBase\ParserBase.fsproj" />
+    <ProjectReference Include="..\TopologicalSort\TopologicalSortCsharp.csproj" />
   </ItemGroup>
 
 </Project>

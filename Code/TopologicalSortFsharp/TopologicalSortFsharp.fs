@@ -50,6 +50,12 @@ let private CheckDependencyExists (id_selecter: 'value -> 'id) (dependency_selec
     | 0 -> Ok values
     | _ -> Dependencies_dont_exist nomatches |> Error
 
+/// <summary>Topologically sorts a list of items and returns a sorted list, or the unsortable items if failure.</summary>
+/// <param name="id_selecter">Take a value of type 'a and return an ID value.</param>
+/// <param name="dependency_selecter">Takes a value of type 'a and returns the ID values of the 'a values it depends on.</param>
+/// <param name="equality_function">Takes two ID values and returns if they are equal.</param>
+/// <param name="values">A sequency of 'a values.</param>
+/// <returns>A sorted list of 'a if the input list was successfully sorted. A list of the values 'a and their ID if an error was encountered.</returns>
 let SortTopologically id_selecter dependency_selecter equality_function values =
     CheckIDUnique id_selecter equality_function values |>
     Result.bind (CheckDependencyExists id_selecter dependency_selecter equality_function) |> 

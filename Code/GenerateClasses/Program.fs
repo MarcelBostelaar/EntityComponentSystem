@@ -11,6 +11,19 @@ open RecordTransform
 [<EntryPoint>]
 let main argv =
 
+(*
+Roadplan for parsing:
+    Programmer:
+    Define buildin type parser
+
+    Program:
+    Read all fields
+
+
+
+*)
+
+
     let makefield name typename typematcher serializername = {fieldname = name; typename = typename; serializername = serializername; typematcher = typematcher}
     let examplefields = [ 
         makefield "field1" "int" "MatchInt" "(fun x -> ParsedData.Float ((float)x))" ;

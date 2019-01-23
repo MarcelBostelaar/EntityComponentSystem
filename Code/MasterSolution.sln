@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.136
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "ParserBase", "ParserBase\ParserBase.fsproj", "{5ED9CE8F-EF12-4A3F-8085-E2CAD1004678}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TopologicalSortCsharp", "TopologicalSort\TopologicalSortCsharp.csproj", "{56503663-947D-4EA9-ADD5-E9F799F5C5FE}"
+EndProject
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "JsonToParsedData", "JsonToParsedData\JsonToParsedData.fsproj", "{C02C19F2-9272-4B19-965E-B14644C40D4B}"
+EndProject
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "ComponentGenerator", "GenerateClasses\ComponentGenerator.fsproj", "{BD6699EB-6147-486B-96BA-DD9779CFF57A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TopologicalSortLibrary", "TopologicalSortLibrary", "{A2AB79A2-EF35-437A-BE72-0CD8154C43B3}"
+EndProject
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "TopologicalSortFsharp", "TopologicalSortFsharp\TopologicalSortFsharp.fsproj", "{5D5C0524-66A0-461F-8D3D-5BAD65F1CBBE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5ED9CE8F-EF12-4A3F-8085-E2CAD1004678}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5ED9CE8F-EF12-4A3F-8085-E2CAD1004678}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5ED9CE8F-EF12-4A3F-8085-E2CAD1004678}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5ED9CE8F-EF12-4A3F-8085-E2CAD1004678}.Release|Any CPU.Build.0 = Release|Any CPU
+		{56503663-947D-4EA9-ADD5-E9F799F5C5FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{56503663-947D-4EA9-ADD5-E9F799F5C5FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{56503663-947D-4EA9-ADD5-E9F799F5C5FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{56503663-947D-4EA9-ADD5-E9F799F5C5FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C02C19F2-9272-4B19-965E-B14644C40D4B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C02C19F2-9272-4B19-965E-B14644C40D4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C02C19F2-9272-4B19-965E-B14644C40D4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C02C19F2-9272-4B19-965E-B14644C40D4B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD6699EB-6147-486B-96BA-DD9779CFF57A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD6699EB-6147-486B-96BA-DD9779CFF57A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD6699EB-6147-486B-96BA-DD9779CFF57A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD6699EB-6147-486B-96BA-DD9779CFF57A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D5C0524-66A0-461F-8D3D-5BAD65F1CBBE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D5C0524-66A0-461F-8D3D-5BAD65F1CBBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D5C0524-66A0-461F-8D3D-5BAD65F1CBBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D5C0524-66A0-461F-8D3D-5BAD65F1CBBE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{56503663-947D-4EA9-ADD5-E9F799F5C5FE} = {A2AB79A2-EF35-437A-BE72-0CD8154C43B3}
+		{5D5C0524-66A0-461F-8D3D-5BAD65F1CBBE} = {A2AB79A2-EF35-437A-BE72-0CD8154C43B3}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DCB3F121-02C4-42F8-9D8D-4AA25A958092}
+	EndGlobalSection
+EndGlobal

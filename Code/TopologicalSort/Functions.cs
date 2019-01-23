@@ -7,6 +7,16 @@ namespace TopologicalSort
 {
     public static class Functions
     {
+        /// <summary>
+        /// Performs a topological sort on an enumerable of type T.
+        /// </summary>
+        /// <typeparam name="T">The type to sort topologically</typeparam>
+        /// <typeparam name="ID">The type of the ID</typeparam>
+        /// <param name="values">The enumerable with the values</param>
+        /// <param name="id_grabber">A function that takes a T and returns an ID</param>
+        /// <param name="dependency_grabber">A function that takes a T and returns an enumerable of the ID's of the objects it depends on.</param>
+        /// <param name="ID_equality">A function which checks of two ID values are equal.</param>
+        /// <returns>A tuple with as first member the sorted items T, and as second value the unsortable items T. Unsortable items contain a circular dependency between themselves.</returns>
         public static Tuple<IEnumerable<T>, IEnumerable<T>> TopologicalSort<T,ID>(IEnumerable<T> values, Func<T, ID> id_grabber, Func<T, IEnumerable<ID>> dependency_grabber, Func<ID,ID,bool> ID_equality)
         {
             var allids = values.Select(id_grabber);
