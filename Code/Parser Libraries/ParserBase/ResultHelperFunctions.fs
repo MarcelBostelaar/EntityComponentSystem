@@ -55,7 +55,7 @@ let IsError result =
     | Error _ -> true
 
 let IsMultiOk resultlist =
-    (ExtractErrors resultlist).Length > 1
+    (ExtractOks resultlist).Length > 1
 
 let FirstOk resultlist =
     List.choose OptionOfOk resultlist |> List.tryHead
