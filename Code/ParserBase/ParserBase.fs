@@ -14,15 +14,15 @@ let MatchBool data =
     | ParsedData.Boolean x -> Ok x
     | _ ->  CreateRootTypeMismatchErrorResult TypeNames.Boolean data
 
-let MatchFloat data =
-    match data with 
-    | ParsedData.Float x -> Ok x
-    | _ -> CreateRootTypeMismatchErrorResult TypeNames.Float data
+//let MatchFloat data =
+//    match data with 
+//    | ParsedData.Float x -> Ok x
+//    | _ -> CreateRootTypeMismatchErrorResult TypeNames.Float data
 
-let MatchInt data =
-    match MatchFloat data with
-    | Error _ -> CreateRootTypeMismatchErrorResult TypeNames.Integer data
-    | Ok x -> if x % 1.0 = 0.0 then int x |> Ok else CreateRootTypeMismatchErrorResult TypeNames.Integer data
+//let MatchInt data =
+//    match MatchFloat data with
+//    | Error _ -> CreateRootTypeMismatchErrorResult TypeNames.Integer data
+//    | Ok x -> if x % 1.0 = 0.0 then int x |> Ok else CreateRootTypeMismatchErrorResult TypeNames.Integer data
 
 let MatchList f data = 
     match data with
@@ -72,8 +72,8 @@ let TupleSecondApplyBound (f: Result<'input,ErrorTrace<ErrorDescription>> -> Res
 
 let MatchStringBound = BindString MatchString "In MatchString"
 let MatchBoolBound = BindString MatchBool "In MatchBool"
-let MatchFloatBound = BindString MatchFloat "In MatchFloat"
-let MatchIntBound = BindString MatchInt "In MatchInt"
+//let MatchFloatBound = BindString MatchFloat "In MatchFloat"
+//let MatchIntBound = BindString MatchInt "In MatchInt"
 let MatchListBound f = BindString (MatchList f) "In MatchList"
 let MatchRecordEntryBound name valuematch = BindString (MatchRecordEntry name valuematch) "In MatchRecordEntry"
 let MatchRecordBound  = BindString MatchRecord "In MatchRecord"

@@ -10,8 +10,8 @@
     <Compile Include="VersionParserCode\klad.fs" />
     <Compile Include="Types.fs" />
     <Compile Include="RecordToFieldList.fs" />
-    <Compile Include="placeholderfilename.fs" />
-    <Compile Include="TypeBuilder.old.fs" />
+    <Compile Include="ParseAndSort.fs" />
+    <Compile Include="CSharpClassBuilder.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 

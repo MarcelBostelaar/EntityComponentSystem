@@ -40,7 +40,7 @@ let private CheckIDUnique (id_selecter: 'value -> 'id) equality_function (values
     | false -> Seq.where (fun x -> snd x <> 1) countbyid |> Seq.map fst |> Ids_not_unique |> Error
 
 let private Contains equalityFunc sequence value=
-    Seq.map (equalityFunc value) sequence |> Seq.forall id
+    Seq.map (equalityFunc value) sequence |> Seq.exists (fun x -> x)
 
 let private CheckDependencyExists (id_selecter: 'value -> 'id) (dependency_selecter: 'value -> 'id seq) (equality_function: 'id -> 'id -> bool) (values : 'value seq) =
     let primaryIds = Seq.map id_selecter values

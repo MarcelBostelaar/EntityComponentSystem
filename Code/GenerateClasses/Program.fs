@@ -1,48 +1,43 @@
 ﻿// Learn more about F# at http://fsharp.org
 
 open System
-open TypeBuilder
-open Types
 open System.IO
-open placeholderfilename
+open ParseAndSort
+open JsonParsedDataConverter
+open ParsedDataStructure
+open ListResultMap
+open ParserErrors
+open ErrorUnion
+open CSharpClassBuilder
 
 
 [<EntryPoint>]
 let main argv =
 
-(*
-Roadplan for parsing:
-    Programmer:
-    Define buildin type parser in dictionairy met naam - functionnaam
+    let positionexample = "position", """
+{
+  "xpos": "int",
+  "ypos": "int"
+}"""
+    let complexexample = "test", """
+{
+  "myposition": "position",
+  "favnumber": "int"
+}"""
+    let primitives = ["int"] |> set
+    let allfiles = [positionexample;complexexample]
+    let parsealljson = TupleMaps.MapTupleSnd ParseJson >> TupleMaps.ResultTupleRight |> List.map >> ListResultMap.ResultListMap >> ResultMap.MapError1 MultiError >> ResultMap.MapError1 ErrorUnion.ParserError
+    let parsedjson =  parsealljson allfiles
+    let sorted = ParseAndSort primitives |> Result.bind <| parsedjson
+    let classify = Result.map (FullWriter primitives "Testnamespace" |> List.map)
+    let files = classify sorted
 
-    Program:
-    Read all fields
-    Turn them into name-type pairs
-    Topologisch sort de nametype pairs met de buildins als dependencyless -> return error als er een fout is
-    Maak serialiser/deserialiser/scaffolding voor elke type in volgorde en voeg de namen toe aan de dictionairy
-
-
-*)
-    
-
-
-
-    let makefield name typename typematcher serializername = {fieldname = name; typename = typename; serializername = serializername; typematcher = typematcher}
-    let examplefields = [ 
-        makefield "field1" "int" "MatchInt" "(fun x -> ParsedData.Float ((float)x))" ;
-        makefield "field2" "float" "MatchFloat" "SerializeFloat";
-        makefield "field3" "bool" "MatchBool" "SerializeBool"]
-    
-    let writer = new StreamWriter("F:/Projects/EntityComponentSystem/ThirdAttempt/testenvironmentfsharp/generatedexampleclass.fs")
-    writer.Write(
-"module TestType
-open RecordChainer
-open ParserBase
-open ParsedDataStructure\n\n")
-    writer.Write((BuildFullType "TestType" examplefields))
-    writer.Close()
-
-
+    let out = new StreamWriter("Testfile.cs")
+    let i = 10
+    match files with
+    | Ok x -> out.WriteLine(String.concat "\n\n" x)
+    | Error x -> ()
+    out.Close();
 
     //Console.Write (String.Format("type {0} = {{ {1} }}", "typename", "here be types"))
     //Console.ReadKey true

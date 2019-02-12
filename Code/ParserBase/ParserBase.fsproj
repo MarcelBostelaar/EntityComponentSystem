@@ -15,6 +15,7 @@
     <Compile Include="RecordChainer.fs" />
     <Compile Include="MatchBuild.fs" />
     <Compile Include="RecordTransform.fs" />
+    <Compile Include="ListResultMap.fs" />
   </ItemGroup>
 
 </Project>
