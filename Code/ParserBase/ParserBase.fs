@@ -46,7 +46,7 @@ let MakeTuple2Result a b = ResultMap.Map2 maketuple a b
 let MatchEntryInRecord matcher (entries : (string* ParsedData) list) =
     let resultsandvalue = (fun x -> matcher x, x) |> List.map <| entries
     let resultsonly list = List.map fst list
-    match (resultsonly resultsandvalue).Length with
+    match (ExtractOks (resultsonly resultsandvalue)).Length with
     | 0 -> (ErrorDescription.String "No matches were found for an entry" , (resultsonly resultsandvalue |> ExtractErrors |> MultiError)) |> ParentError |> Error
     | 1 ->
         let matchremoved = List.where (fun x -> fst x |> IsError) resultsandvalue |> List.map snd //all unmatched entries

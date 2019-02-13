@@ -12,6 +12,7 @@
     <Compile Include="RecordToFieldList.fs" />
     <Compile Include="ParseAndSort.fs" />
     <Compile Include="CSharpClassBuilder.fs" />
+    <Compile Include="SettingsHandler.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 
