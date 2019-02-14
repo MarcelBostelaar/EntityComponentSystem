@@ -1,0 +1,8 @@
+{
+  "TargetBuildLocation": "../../../../../BuildTest/Build",
+  "TargetSourceLocation": "../../../../../BuildTest/Source",
+  "Primitives": [
+    "float",
+    "int"
+  ]
+}
