@@ -25,5 +25,10 @@ namespace TopologicalSort
         {
             return values.ToArray();
         }
+
+        public static IEnumerable<Node<ID, T>> OnlyWithDependencies<ID,T>(this IEnumerable<Node<ID,T>> nodes)
+        {
+            return nodes.Where(x => x.dependencies.Count > 0);
+        }
     }
 }

@@ -11,6 +11,7 @@
     <Compile Include="ParseAndSort.fs" />
     <Compile Include="CSharpClassBuilder.fs" />
     <Compile Include="SettingsHandler.fs" />
+    <Compile Include="ErrorStringifier.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 

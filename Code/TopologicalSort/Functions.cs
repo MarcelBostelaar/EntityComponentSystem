@@ -33,7 +33,7 @@ namespace TopologicalSort
             AddDependencies(halfnodes, ID_equality);
             var nodes = halfnodes.Select(x => x.Item2);
             var sorted_and_error = KahnsAlgorithm(nodes);
-            return new Tuple<IEnumerable<T>, IEnumerable<T>>(sorted_and_error.Item1.Select(x => x.value).Evaluate(), sorted_and_error.Item2.Select(x => x.value).Evaluate());
+            return new Tuple<IEnumerable<T>, IEnumerable<T>>(sorted_and_error.Item1.Select(x => x.value).Evaluate(), sorted_and_error.Item2.OnlyWithDependencies().Select(x => x.value).Evaluate());
         }
 
         private static IEnumerable<Tuple<IEnumerable<ID>, Node<ID, T>>> BuildNodesNoDependencies<ID, T>(IEnumerable<T> values, Func<T, ID> id_grabber, Func<T, IEnumerable<ID>> dependency_grabber)

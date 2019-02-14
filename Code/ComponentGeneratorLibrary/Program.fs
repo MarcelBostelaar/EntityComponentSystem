@@ -7,6 +7,7 @@ open JsonParsedDataConverter
 open ParserErrors
 open CSharpClassBuilder
 open SettingsHandler
+open ErrorStringifier
 let extention = ".json"
 
 let private withextention (extention:string) (file : string) =
@@ -40,8 +41,8 @@ let private WriteClassToFile path extention (item: string*string) =
 
 let private HandleResult result (settings : settings)=
     match result with
-    | Ok i -> ignore <| List.map (WriteClassToFile settings.TargetBuildLocation ".cs") i
-    | Error i -> Console.WriteLine("An error has occurred")
+    | Ok i -> ignore <| List.map (WriteClassToFile settings.TargetBuildLocation ".cs") i; Console.WriteLine("Succesfully generated code")
+    | Error i -> Console.WriteLine(String.Format("An error has ocurred:\n{0}", StringifyUnionError i))
 
 let MasterFunction unit = 
     let settings = LoadSettings () 
