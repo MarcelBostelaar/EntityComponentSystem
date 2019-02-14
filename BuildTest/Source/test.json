@@ -1,14 +1,5 @@
 {
-	"test" : "int",
-	"test1" : "int",
-	"test2" : "int",
-	"test3" : "int",
-	"test4" : "int",
-	"test5" : "int",
-	"test6" : "int",
-	"test7" : "int",
-	"test8" : "int",
-	"test9" : "float",
+	"field1" : "int",
 	"test10" : "test2",
 	"test11" : "test3"
 }

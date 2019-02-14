@@ -26,9 +26,29 @@ namespace TopologicalSort
             return values.ToArray();
         }
 
+        private static IEnumerable<Node<ID, T>> RemoveOnceWithNoDependencies<ID, T>(this IEnumerable<Node<ID, T>> nodes)
+        {
+            var with_no_outgoingdependencies = nodes.Where(x => x.dependencies.Count == 0).Evaluate();
+            var with_outgoingdependencies = nodes.Where(x => x.dependencies.Count > 0).Evaluate(); //lazy evalutation causes odd behaviour (double excecution of this filter) so it is evaluated to ensure it does what the function title says, although "OnlyWithDependencies" wont change behaviour. If no changes are made to "OnlyWithDependencies" after 14-feb-2019, and it is not used anywhere else, it could be removed to gain slightly more performance.
+            foreach (var toremove in with_no_outgoingdependencies)
+            {
+                foreach (var removefrom in with_outgoingdependencies)
+                {
+                    removefrom.dependencies.Remove(toremove);
+                }
+            }
+            return with_outgoingdependencies;
+        }
+
         public static IEnumerable<Node<ID, T>> OnlyWithDependencies<ID,T>(this IEnumerable<Node<ID,T>> nodes)
         {
-            return nodes.Where(x => x.dependencies.Count > 0);
+            var reduced = RemoveOnceWithNoDependencies(nodes);
+            while (nodes.Count() != reduced.Count())
+            {
+                nodes = reduced;
+                reduced = RemoveOnceWithNoDependencies(nodes);
+            }
+            return reduced;
         }
     }
 }

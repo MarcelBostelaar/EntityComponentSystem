@@ -25,24 +25,24 @@ let rec StringifyErrorTrace (trace : ErrorTrace<ErrorDescription>) =
     | ParentError (parent, child) -> String.Format("{0}\n{{{1}\n}}", StringifyErrorDescription parent, StringifyErrorTrace child)
     | MultiError x -> List.map StringifyErrorTrace x |> String.concat ",\n\n" |> fun x -> "Multiple Errors:\n" + x
 
-let ParsedFieldToData field = 
-    fst field, (List.map (fun x -> x.name, ParsedData.String x.typename) (snd field) |> Record)
+let ParsedFieldToData (field : Filenamepair<ParsedField list>) = 
+    field.filename, (List.map (fun x -> x.name, ParsedData.String x.typename) (field.data) |> Record)
 
-let missingdependencytodataentry (missing: (string*ParsedField list)*string) =
+let missingdependencytodataentry (missing: Filenamepair<ParsedField list>*string) =
     let (data, missingid) = missing
     let data = ParsedFieldToData data
     ["Data", Record [data]; "Missing ID", String missingid] |> Record
    
-let allmissingdependencies (missinglist : seq<(string*ParsedField list)*string>) = 
+let allmissingdependencies (missinglist : seq< Filenamepair<ParsedField list>*string>) = 
     Seq.map missingdependencytodataentry missinglist |> Seq.toList |> List
 
-let StringifyTopologicalSortError (error : TopologicalSortFsharp.Error<string, string*ParsedField list>) =
+let StringifyTopologicalSortError (error : TopologicalSortFsharp.Error<string, Filenamepair<ParsedField list>>) =
     match error with
     | Ids_not_unique x -> String.Format("While topologically sorting, some IDs were not unique:\n{0}", String.concat ", " x)
     | Dependencies_dont_exist x -> String.Format("While topologically sorting, some dependencies were missing:\n{0}", ParsedDataToJson <| allmissingdependencies x)
     | Circular_dependencies_exist x -> String.Format("While topologically sorting, some dependencies were circular, which is not allowed.\nThe following data has circular dependencies:\n{0}", Seq.toList x |> List.map ParsedFieldToData |> Record |> ParsedDataToJson)
 
-let StringifyUnionError (error : ErrorUnion<string, string * ParsedField list, ErrorDescription>) =
+let StringifyUnionError (error : ErrorUnion<string, Filenamepair<ParsedField list>, ErrorDescription>) =
     match error with
     | ParserError x -> StringifyErrorTrace x
     | TopologicalSortError x -> StringifyTopologicalSortError x
