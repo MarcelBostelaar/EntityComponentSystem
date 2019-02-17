@@ -10,6 +10,7 @@ open SettingsHandler
 open ErrorStringifier
 open Types
 open ErrorUnion
+open ResultHelperFunctions
 
 let extention = ".json"
 
@@ -45,13 +46,20 @@ let private WriteClassToFile path extention (item: Filenamepair<string>) =
     out.Write(item.data)
     out.Close()
 
-let private HandleResult (result : Result<Filenamepair<string> list,ErrorUnion<string, Filenamepair<ParsedField list>, ErrorDescription>>) (settings : settings)=
-    match result with
-    | Ok i -> ignore <| List.map (WriteClassToFile settings.TargetBuildLocation ".cs") i; Console.WriteLine("Succesfully generated code")
-    | Error i -> Console.WriteLine(String.Format("An error has ocurred:\n{0}", StringifyUnionError i))
+let private HandleOkResult (result: Filenamepair<string> list) (settings: settings) =
+    ignore <| List.map (WriteClassToFile settings.TargetBuildLocation ".cs") result
+    Console.WriteLine("Succesfully generated code")
 
-let MasterFunction unit = 
+let private HandleErrorResult (result: ErrorUnion<string, Filenamepair<ParsedField list>, ErrorDescription>) =
+    Console.WriteLine(String.Format("An error has ocurred:\n{0}", StringifyUnionError result))
+
+let private HandleResult (result : Result<Filenamepair<string> list,ErrorUnion<string, Filenamepair<ParsedField list>, ErrorDescription>>) (settings : settings option)=
+    match (result, settings) with
+    | Ok R, Some S -> HandleOkResult R S
+    | Error R, _ -> HandleErrorResult R
+    | Ok R, None -> raise (Exception("This should never happen, cannot have an OK result while not having settings!"))
+
+let MasterFunction () = 
     let settings = LoadSettings () 
     let result = Result.mapError ErrorUnion.ParserError settings |> Result.bind MasterBuild
-    ignore <| Result.map (HandleResult result) settings
-    ()
+    HandleResult result (OptionOfOk settings)

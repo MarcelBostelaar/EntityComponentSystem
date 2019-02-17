@@ -11,6 +11,7 @@ open ErrorUnion
 open CSharpClassBuilder
 open FSharp.Data
 open MatchBuild
+open System.Diagnostics
 
 let settingsfile = "settings.json"
 let TargetBuildFieldname = "TargetBuildLocation"
@@ -18,8 +19,8 @@ let TargetSourceFieldname = "TargetSourceLocation"
 let PrimitivesFieldName = "Primitives"
 
 let ExampleJson = [
-    TargetBuildFieldname,    JsonValue.String "C:\somepath";
-    TargetSourceFieldname,    JsonValue.String "C:\someotherpath";
+    TargetBuildFieldname,    JsonValue.String "C:\\Example_Build_Directory";
+    TargetSourceFieldname,    JsonValue.String "C:\\Example_Source_Directory";
     PrimitivesFieldName,   JsonValue.Array <| Array.map JsonValue.String (Seq.toArray ["float"; "int"])
                     ] |> Seq.toArray |> JsonValue.Record
 
@@ -29,6 +30,7 @@ let private CreateExampleFile unit=
     let writer = new StreamWriter(settingsfile)
     writer.Write(ExampleJson.ToString JsonSaveOptions.None)
     writer.Close()
+    Debug.WriteLine("Writing settings examplefile")
 
 let private settingscreate prims source target = {Primitives = prims; TargetBuildLocation= target; TargetSourceLocation= source}
 
