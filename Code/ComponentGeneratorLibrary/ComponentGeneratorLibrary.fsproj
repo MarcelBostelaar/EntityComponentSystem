@@ -12,6 +12,7 @@
     <Compile Include="CSharpClassBuilder.fs" />
     <Compile Include="SettingsHandler.fs" />
     <Compile Include="ErrorStringifier.fs" />
+    <Compile Include="FSharpBuilder.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 

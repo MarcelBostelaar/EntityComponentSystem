@@ -12,6 +12,7 @@ type namemismatch = {expectedName: string; actual: string}
 
 type ErrorDescription=
     | String of string
+    | ParsedDataError of ParsedData
     | TypeMismatch of typemismatch
     | NameMismatch of namemismatch
     | MultipleMatched of (string * ParsedData) list

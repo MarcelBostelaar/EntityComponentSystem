@@ -13,7 +13,7 @@ let private addfieldlistparseerror (data : Filenamepair<ParsedData>) (error : Er
     
 
 let private parsesingledata (data : Filenamepair<ParsedData>) =
-    FilenamepairMap RecordToFieldlist data |> FilenamepairResultExtract |> Result.mapError (addfieldlistparseerror data)
+    FilenamepairMap RecordToFieldlist data |> FilenamepairOkResultExtract |> Result.mapError (addfieldlistparseerror data)
 
 ///<summary>Turns a list of key-data pairs into a list of key-parsedfield pairs, or an error if it isnt a parsedfield</summary>
 let private parsedata data =

@@ -8,8 +8,7 @@ let GenerateMatchBuild lenght =
     String.Format(
 """let MatchBuild{0} func {1} data =
     let nested_tuples = MatchRecord data |> EntryChainStarter |> {2} EntryChainFinisher
-    ApplyChainStart (Ok func) nested_tuples |> {3} ApplyChainFinish
-    """,
+    ApplyChainStart (Ok func) nested_tuples |> {3} ApplyChainFinish""",
     lenght.ToString(),
     List.map (fun x -> "entry" + x.ToString()) [1 .. lenght] |> String.concat " ",
     List.map (fun x -> "chainify entry" + x.ToString() + " |>") [lenght .. -1 .. 1] |> String.concat " ",
