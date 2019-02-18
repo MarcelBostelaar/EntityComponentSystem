@@ -81,5 +81,5 @@ let LoadSettings unit=
     match doesexist with
     | false -> 
         CreateExampleFile ()
-        RootErrorResult <| ErrorDescription.String "No settings file found, generated a new one"
+        RootErrorResult <| ErrorDescription.String "No settings file found, generated a new one. Please edit the settings.json file."
     | true -> ReadSettings () |> AddParentStrError "While reading settings file" |> Result.bind ValidateSourceDirectory |> Result.map ValidateOrCreateTarget

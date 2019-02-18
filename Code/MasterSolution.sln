@@ -15,9 +15,11 @@ Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "TopologicalSortFsharp", "To
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestLibrary", "TestLibrary\TestLibrary.csproj", "{96708DB3-D575-4576-9220-3BAD25F4ACD8}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "ComponentGeneratorStandalone", "ComponentGeneratorStandalone\ComponentGeneratorStandalone.fsproj", "{F63E3DDC-0DF8-45CB-8970-C24872BA91AD}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "ComponentGeneratorStandalone", "ComponentGeneratorStandalone\ComponentGeneratorStandalone.fsproj", "{F63E3DDC-0DF8-45CB-8970-C24872BA91AD}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "ComponentGeneratorLibrary", "ComponentGeneratorLibrary\ComponentGeneratorLibrary.fsproj", "{89D97FC2-581E-41B1-A877-8332470635ED}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "ComponentGeneratorLibrary", "ComponentGeneratorLibrary\ComponentGeneratorLibrary.fsproj", "{89D97FC2-581E-41B1-A877-8332470635ED}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ComponentGenerator", "ComponentGenerator", "{A825F913-E96C-455C-86E6-4E57CBC47D26}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -60,6 +62,8 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{56503663-947D-4EA9-ADD5-E9F799F5C5FE} = {A2AB79A2-EF35-437A-BE72-0CD8154C43B3}
 		{5D5C0524-66A0-461F-8D3D-5BAD65F1CBBE} = {A2AB79A2-EF35-437A-BE72-0CD8154C43B3}
+		{F63E3DDC-0DF8-45CB-8970-C24872BA91AD} = {A825F913-E96C-455C-86E6-4E57CBC47D26}
+		{89D97FC2-581E-41B1-A877-8332470635ED} = {A825F913-E96C-455C-86E6-4E57CBC47D26}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DCB3F121-02C4-42F8-9D8D-4AA25A958092}
